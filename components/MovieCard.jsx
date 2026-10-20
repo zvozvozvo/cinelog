@@ -17,7 +17,9 @@ export default function MovieCard({ movie, index = 0 }) {
     movie.year ||
     "—";
 
-  const rating = Number(movie.personalRating);
+  const rating = Number(
+    movie.youRating ?? movie.personalRating ?? 0
+  );
 
   const status =
     movie.status === "watchlist"
@@ -52,7 +54,6 @@ export default function MovieCard({ movie, index = 0 }) {
       tabIndex={0}
     >
       <div className="relative aspect-[2/3] overflow-hidden bg-[#101310]">
-
         {posterUrl ? (
           <img
             src={posterUrl}
@@ -126,9 +127,7 @@ export default function MovieCard({ movie, index = 0 }) {
       </div>
 
       <div className="pt-4">
-
         <div className="flex items-start gap-4">
-
           <h3
             className="
               cine-serif
@@ -158,7 +157,6 @@ export default function MovieCard({ movie, index = 0 }) {
           >
             {year}
           </span>
-
         </div>
 
         <div
@@ -210,7 +208,6 @@ export default function MovieCard({ movie, index = 0 }) {
             </span>
           )}
         </div>
-
       </div>
     </article>
   );
