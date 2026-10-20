@@ -26,10 +26,10 @@ function formatTime(minutes) {
   const remaining = value % 60;
 
   if (hours) {
-    return `${hours}h${remaining ? ` ${remaining}m` : ""}`;
+    return `${hours} ч${remaining ? ` ${remaining} мин` : ""}`;
   }
 
-  return `${remaining}m`;
+  return `${remaining} мин`;
 }
 
 
@@ -337,25 +337,22 @@ export default function Statistics({ movies = [] }) {
 
       <section className="border-b border-white/[.13] py-14 md:py-16">
         <p className="cine-kicker cine-accent">
-          Personal analytics / Archive
+          Личная аналитика / Архив
         </p>
 
         <div className="mt-4 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <h1 className="cine-page-title">
-              Statistics
+              Статистика
             </h1>
 
             <p className="cine-page-subtitle">
-              A numerical record of what you watch,
-              how you rate it and where your taste
-              tends to land.
+              Статистика о том, что ты смотришь, как оцениваешь фильмы и какие жанры тебе ближе.
             </p>
           </div>
 
           <div className="cine-mono text-[9px] uppercase tracking-[.15em] text-white/25">
-            {watched.length} watched /{" "}
-            {watchlist.length} saved
+            {watched.length} просмотрено / {watchlist.length} в списке
           </div>
         </div>
       </section>
@@ -372,8 +369,8 @@ export default function Statistics({ movies = [] }) {
               />
             }
             value={watched.length}
-            label="Watched films"
-            detail={`${watchlist.length} films waiting in the queue`}
+            label="Просмотренные фильмы"
+            detail={`В списке «К просмотру»: ${watchlist.length}`}
           />
 
           <StatBlock
@@ -388,8 +385,8 @@ export default function Statistics({ movies = [] }) {
                 ? stats.averageRating.toFixed(1)
                 : "—"
             }
-            label="Average rating"
-            detail={`${ratedMovies.length} rated films`}
+            label="Средняя оценка"
+            detail={`Оценено фильмов: ${ratedMovies.length}`}
           />
 
           <StatBlock
@@ -404,11 +401,11 @@ export default function Statistics({ movies = [] }) {
                 ? getYouRating(stats.highestRated).toFixed(1)
                 : "—"
             }
-            label="Highest rating"
+            label="Лучшая оценка"
             detail={
               stats.highestRated
                 ? stats.highestRated.title
-                : "No rated films yet"
+                : "Пока нет оценённых фильмов"
             }
           />
 
@@ -422,8 +419,8 @@ export default function Statistics({ movies = [] }) {
             value={formatTime(
               stats.totalRuntime
             )}
-            label="Time watched"
-            detail="Total runtime of your watched films"
+            label="Время просмотра"
+            detail="Общая длительность просмотренных фильмов"
           />
         </div>
       </section>
@@ -441,7 +438,7 @@ export default function Statistics({ movies = [] }) {
               </span>
 
               <h2 className="cine-serif text-4xl tracking-[-.035em] text-[var(--paper)]">
-                Rating distribution
+                Распределение оценок
               </h2>
             </div>
 
@@ -494,7 +491,7 @@ export default function Statistics({ movies = [] }) {
               )}
             </div>
           ) : (
-            <EmptyChart text="Rate some watched films to see your rating distribution." />
+            <EmptyChart text="Оцени несколько просмотренных фильмов, чтобы увидеть распределение оценок." />
           )}
         </div>
 
@@ -508,7 +505,7 @@ export default function Statistics({ movies = [] }) {
               </span>
 
               <h2 className="cine-serif text-4xl tracking-[-.035em] text-[var(--paper)]">
-                What you watch
+                Что ты смотришь
               </h2>
             </div>
 
@@ -556,7 +553,7 @@ export default function Statistics({ movies = [] }) {
               )}
             </div>
           ) : (
-            <EmptyChart text="Genre statistics will appear after you add watched films." />
+            <EmptyChart text="Статистика жанров появится после добавления просмотренных фильмов." />
           )}
         </div>
       </section>
@@ -571,7 +568,7 @@ export default function Statistics({ movies = [] }) {
             </span>
 
             <h2 className="cine-serif text-4xl tracking-[-.035em] text-[var(--paper)] md:text-5xl">
-              Films by release year
+              Фильмы по году выхода
             </h2>
           </div>
 
@@ -649,7 +646,7 @@ export default function Statistics({ movies = [] }) {
             </div>
           </div>
         ) : (
-          <EmptyChart text="Release year statistics will appear after you add watched films." />
+          <EmptyChart text="Статистика по годам выхода появится после добавления просмотренных фильмов." />
         )}
       </section>
 
@@ -721,7 +718,7 @@ export default function Statistics({ movies = [] }) {
               </span>
 
               <h2 className="cine-serif text-4xl tracking-[-.035em] text-[var(--paper)]">
-                Longest film
+                Самый длинный фильм
               </h2>
             </div>
           </div>
@@ -796,7 +793,7 @@ export default function Statistics({ movies = [] }) {
             </button>
           ) : (
             <div className="border-y border-dashed border-white/[.10] py-16 text-center cine-mono text-[9px] uppercase tracking-[.12em] text-white/20">
-              No runtime data available yet.
+              Данных о длительности пока нет.
             </div>
           )}
         </div>
@@ -811,7 +808,7 @@ export default function Statistics({ movies = [] }) {
               </span>
 
               <h2 className="cine-serif text-4xl tracking-[-.035em] text-[var(--paper)]">
-                Recent additions
+                Недавно добавленные
               </h2>
             </div>
 
@@ -870,8 +867,8 @@ export default function Statistics({ movies = [] }) {
                       <p className="mt-1 cine-mono text-[8px] uppercase tracking-[.12em] text-white/20">
                         {movie.status ===
                         "watched"
-                          ? "Watched"
-                          : "Watchlist"}
+                          ? "Просмотрено"
+                          : "К просмотру"}
                       </p>
                     </div>
 
@@ -886,7 +883,7 @@ export default function Statistics({ movies = [] }) {
             </div>
           ) : (
             <div className="border-y border-dashed border-white/[.10] py-16 text-center cine-mono text-[9px] uppercase tracking-[.12em] text-white/20">
-              No activity yet.
+              Пока нет активности.
             </div>
           )}
         </div>
@@ -898,15 +895,15 @@ export default function Statistics({ movies = [] }) {
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3 cine-mono text-[9px] uppercase tracking-[.14em] text-white/25">
             <span>
-              {watched.length} watched
+              {watched.length} просмотрено
             </span>
 
             <span>
-              {watchlist.length} saved
+              {watchlist.length} в списке
             </span>
 
             <span>
-              {ratedMovies.length} rated
+              {ratedMovies.length} оценено
             </span>
 
             <span>
@@ -933,7 +930,7 @@ export default function Statistics({ movies = [] }) {
               hover:text-[#b7f34a]
             "
           >
-            Back to home
+            На главную
 
             <ArrowRight
               size={13}

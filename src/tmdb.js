@@ -4,42 +4,43 @@ const TMDB_TOKEN = rawToken
   ?.trim()
   .replace(/^Bearer\s+/i, "");
 
+console.log(
+  "TMDB TOKEN:",
+  TMDB_TOKEN ? "НАЙДЕН" : "НЕ НАЙДЕН"
+);
+
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
 async function tmdbRequest(endpoint) {
   if (!TMDB_TOKEN) {
     throw new Error(
-      "TMDB token is missing. Check your environment settings."
+      "TMDB_TOKEN не найден. Проверь .env и перезапусти Vite."
     );
   }
 
-  let response;
-
-  try {
-    response = await fetch(`${TMDB_BASE_URL}${endpoint}`, {
+  const response = await fetch(
+    `${TMDB_BASE_URL}${endpoint}`,
+    {
       headers: {
         Authorization: `Bearer ${TMDB_TOKEN}`,
         Accept: "application/json",
       },
-    });
-  } catch {
-    throw new Error(
-      "Unable to connect to TMDB. Check your internet connection and try again."
-    );
-  }
+    }
+  );
 
-  let data = null;
+  const data = await response.json();
 
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error("TMDB returned an invalid response.");
-  }
+  console.log(
+    "TMDB RESPONSE:",
+    response.status,
+    data
+  );
 
   if (!response.ok) {
     throw new Error(
-      data?.status_message ||
-        `TMDB request failed with status ${response.status}.`
+      `TMDB_${response.status}: ${
+        data.status_message || "Unknown error"
+      }`
     );
   }
 
@@ -47,15 +48,13 @@ async function tmdbRequest(endpoint) {
 }
 
 export async function searchMovies(query) {
-  const normalizedQuery = query.trim();
-
-  if (!normalizedQuery) {
+  if (!query.trim()) {
     return [];
   }
 
   const data = await tmdbRequest(
     `/search/movie?query=${encodeURIComponent(
-      normalizedQuery
+      query
     )}&include_adult=false&language=ru-RU&page=1`
   );
 
@@ -68,7 +67,10 @@ export async function getMovie(id) {
   );
 }
 
-export function getPoster(path, size = "w500") {
+export function getPoster(
+  path,
+  size = "w500"
+) {
   if (!path) {
     return null;
   }
@@ -76,10 +78,38 @@ export function getPoster(path, size = "w500") {
   return `https://image.tmdb.org/t/p/${size}${path}`;
 }
 
-export function getBackdrop(path, size = "original") {
+export function getBackdrop(
+  path,
+  size = "original"
+) {
   if (!path) {
     return null;
   }
 
   return `https://image.tmdb.org/t/p/${size}${path}`;
+}
+
+// Подборка фильмов по жанрам, популярности и пользовательским оценкам.
+export async function discoverMovies(options = {}) {
+  const params = new URLSearchParams({
+    language: "ru-RU",
+    include_adult: "false",
+    sort_by: "popularity.desc",
+    page: "1",
+  });
+
+  for (const [key, value] of Object.entries(options || {})) {
+    if (value === undefined || value === null || value === "") continue;
+    params.set(key, String(value));
+  }
+
+  const data = await tmdbRequest(`/discover/movie?${params.toString()}`);
+  return data.results || [];
+}
+
+export async function getMovieRecommendations(id) {
+  const data = await tmdbRequest(
+    `/movie/${encodeURIComponent(id)}/recommendations?language=ru-RU&page=1`
+  );
+  return data.results || [];
 }

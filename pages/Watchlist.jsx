@@ -44,7 +44,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
 
           <div>
             <p className="cine-kicker cine-accent">
-              Saved for later / Queue
+              Отложено на потом / Список
             </p>
 
             <div className="mt-4 flex items-center gap-5">
@@ -53,15 +53,12 @@ export default function Watchlist({ movies = [], onAddMovie }) {
               </span>
 
               <h1 className="cine-page-title">
-                Watchlist
+                К просмотру
               </h1>
             </div>
 
             <p className="cine-page-subtitle">
-              The films you have deliberately postponed
-              watching. A carefully maintained queue of
-              things you will absolutely get around to.
-              Probably.
+              Фильмы, просмотр которых ты отложил. Аккуратный список того, что ты когда-нибудь обязательно посмотришь.
             </p>
           </div>
 
@@ -71,7 +68,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
             className="flex h-[52px] shrink-0 items-center justify-center gap-3 border border-[#b7f34a] bg-[#b7f34a] px-6 cine-mono text-[10px] font-bold uppercase tracking-[.15em] text-black transition duration-200 hover:bg-[#c7ff62]"
           >
             <Plus size={15} strokeWidth={2} />
-            Add film
+            Добавить фильм
           </button>
 
         </div>
@@ -91,7 +88,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
               type="text"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search your watchlist..."
+              placeholder="Поиск в списке «К просмотру»..."
               className="h-[48px] w-full border-0 border-b border-white/[.20] bg-transparent pl-8 pr-10 cine-mono text-[11px] tracking-[.04em] text-[#eeeae0] outline-none placeholder:text-white/25 focus:border-[#b7f34a]"
             />
 
@@ -99,7 +96,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                aria-label="Clear search"
+                aria-label="Очистить поиск"
                 className="absolute right-0 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center text-white/30 hover:text-[#b7f34a]"
               >
                 <X size={14} strokeWidth={1.8} />
@@ -111,7 +108,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
 
             <div>
               <span className="cine-mono text-[9px] uppercase tracking-[.15em] text-white/25">
-                Queue
+                В списке
               </span>
 
               <span className="ml-2 cine-mono text-[10px] uppercase tracking-[.1em] text-[#b7f34a]">
@@ -123,7 +120,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
 
             <div>
               <span className="cine-mono text-[9px] uppercase tracking-[.15em] text-white/25">
-                Watched
+                Просмотрено
               </span>
 
               <span className="ml-2 cine-mono text-[10px] uppercase tracking-[.1em] text-white/45">
@@ -142,18 +139,22 @@ export default function Watchlist({ movies = [], onAddMovie }) {
 
           <div>
             <span className="cine-mono text-[9px] uppercase tracking-[.17em] text-white/30">
-              Your queue
+              Твой список
             </span>
 
             <h2 className="mt-2 cine-serif text-4xl tracking-[-.035em] text-[#eeeae0] md:text-5xl">
               {watchlist.length}{" "}
-              {watchlist.length === 1 ? "film" : "films"}
+              {watchlist.length % 10 === 1 && watchlist.length % 100 !== 11
+                ? "фильм"
+                : watchlist.length % 10 >= 2 && watchlist.length % 10 <= 4 && (watchlist.length % 100 < 12 || watchlist.length % 100 > 14)
+                ? "фильма"
+                : "фильмов"}
             </h2>
           </div>
 
           {query && (
             <span className="cine-mono text-[9px] uppercase tracking-[.13em] text-white/30">
-              Search: “{query}”
+              Поиск: «{query}»
             </span>
           )}
 
@@ -183,12 +184,11 @@ export default function Watchlist({ movies = [], onAddMovie }) {
               />
 
               <h2 className="mt-6 cine-serif text-4xl tracking-[-.035em] text-[#eeeae0] md:text-5xl">
-                Your queue is empty.
+                Список пока пуст.
               </h2>
 
               <p className="mx-auto mt-5 max-w-[500px] text-sm leading-6 text-white/35">
-                Browse the archive, find something worth
-                watching and save it here.
+                Найди интересный фильм в архиве и добавь его сюда, чтобы посмотреть позже.
               </p>
 
               <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -198,7 +198,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
                   onClick={() => navigate("/films")}
                   className="flex h-[50px] items-center justify-center gap-3 border border-white/[.20] px-6 cine-mono text-[10px] font-bold uppercase tracking-[.15em] text-white/65 transition hover:border-white/[.40] hover:text-white"
                 >
-                  Browse films
+                  Найти фильмы
                   <ArrowRight size={14} strokeWidth={1.8} />
                 </button>
 
@@ -208,7 +208,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
                   className="flex h-[50px] items-center justify-center gap-3 border border-[#b7f34a] bg-[#b7f34a] px-6 cine-mono text-[10px] font-bold uppercase tracking-[.15em] text-black transition hover:bg-[#c7ff62]"
                 >
                   <Plus size={14} strokeWidth={2} />
-                  Add film
+                  Добавить фильм
                 </button>
 
               </div>
@@ -226,12 +226,12 @@ export default function Watchlist({ movies = [], onAddMovie }) {
 
             <span className="inline-flex items-center gap-2 cine-mono text-[9px] uppercase tracking-[.15em] text-white/30">
               <Bookmark size={12} strokeWidth={1.6} />
-              {watchlist.length} saved
+              {watchlist.length} в списке
             </span>
 
             <span className="inline-flex items-center gap-2 cine-mono text-[9px] uppercase tracking-[.15em] text-white/30">
               <Film size={12} strokeWidth={1.6} />
-              {watched} watched
+              {watched} просмотрено
             </span>
 
           </div>
@@ -241,7 +241,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
             onClick={() => navigate("/films")}
             className="group inline-flex items-center gap-3 cine-mono text-[9px] font-medium uppercase tracking-[.15em] text-white/35 transition-colors hover:text-[#b7f34a]"
           >
-            Find another film
+            Найти другой фильм
 
             <ArrowRight
               size={14}

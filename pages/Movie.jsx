@@ -12,7 +12,10 @@ import {
   X,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import { getBackdrop, getMovie, getPoster } from "../src/tmdb";
+import { supabase } from "../supabase";
+import MovieJournal from "../components/MovieJournal";
 
 function formatRuntime(minutes) {
   if (!minutes || Number(minutes) <= 0) return "—";
@@ -22,10 +25,10 @@ function formatRuntime(minutes) {
   const mins = value % 60;
 
   if (hours) {
-    return `${hours}h${mins ? ` ${mins}m` : ""}`;
+    return `${hours} ч${mins ? ` ${mins} мин` : ""}`;
   }
 
-  return `${mins}m`;
+  return `${mins} мин`;
 }
 
 function formatDate(date) {
@@ -65,28 +68,26 @@ export default function Movie({
 
   const [remoteMovie, setRemoteMovie] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const initialRating =
+    localMovie?.youRating != null
+      ? Number(localMovie.youRating)
+      : localMovie?.personalRating != null
+      ? Number(localMovie.personalRating)
+      : 8;
 
   const [status, setStatus] = useState(
     localMovie?.status || "watched"
   );
 
   const [rating, setRating] = useState(
-    Number(localMovie?.personalRating) || 8
-  );
-
-  const [youRating, setYouRating] = useState(
-    localMovie?.youRating != null
-      ? Number(localMovie.youRating)
-      : localMovie?.personalRating != null
-        ? Number(localMovie.personalRating)
-        : 8
-  );
-
-  const [herRating, setHerRating] = useState(
-    localMovie?.herRating != null ? Number(localMovie.herRating) : 0
+    Number.isFinite(initialRating)
+      ? initialRating
+      : 8
   );
 
   useEffect(() => {
@@ -94,6 +95,7 @@ export default function Movie({
 
     async function loadMovie() {
       setLoading(true);
+      setError("");
 
       try {
         const data = await getMovie(id);
@@ -103,6 +105,12 @@ export default function Movie({
         }
       } catch (error) {
         console.error("Movie details error:", error);
+
+        if (active) {
+          setError(
+            "Не удалось загрузить подробную информацию из TMDB. Сохранённые данные фильма доступны."
+          );
+        }
       } finally {
         if (active) {
           setLoading(false);
@@ -118,24 +126,27 @@ export default function Movie({
   }, [id]);
 
   useEffect(() => {
-    setStatus(localMovie?.status || "watched");
-
-    const nextYouRating =
+    const currentRating =
       localMovie?.youRating != null
         ? Number(localMovie.youRating)
         : localMovie?.personalRating != null
-          ? Number(localMovie.personalRating)
-          : 8;
+        ? Number(localMovie.personalRating)
+        : 8;
 
-    setRating(nextYouRating);
-    setYouRating(nextYouRating);
-    setHerRating(localMovie?.herRating != null ? Number(localMovie.herRating) : 0);
+    setStatus(
+      localMovie?.status || "watched"
+    );
+
+    setRating(
+      Number.isFinite(currentRating)
+        ? currentRating
+        : 8
+    );
   }, [
     localMovie?.id,
     localMovie?.status,
-    localMovie?.personalRating,
     localMovie?.youRating,
-    localMovie?.herRating,
+    localMovie?.personalRating,
   ]);
 
   if (!localMovie && loading) {
@@ -143,6 +154,7 @@ export default function Movie({
       <div className="cine-empty my-20 min-h-[500px]">
         <div>
           <div className="mx-auto h-9 w-9 animate-spin rounded-full border-2 border-white/10 border-t-[var(--acid)]" />
+
           <p className="mt-5 text-center cine-kicker">
             Loading film
           </p>
@@ -162,11 +174,11 @@ export default function Movie({
           />
 
           <h1 className="cine-empty__title">
-            Film not found.
+            Фильм не найден.
           </h1>
 
           <p className="cine-empty__text">
-            This film is not in your CineLog archive.
+            Этого фильма нет в твоём архиве CineLog.
           </p>
 
           <button
@@ -175,7 +187,7 @@ export default function Movie({
             className="cine-button cine-button--solid mt-6"
           >
             <ArrowLeft size={14} />
-            Back to films
+            К фильмам
           </button>
         </div>
       </div>
@@ -186,7 +198,7 @@ export default function Movie({
     remoteMovie?.title ||
     localMovie.title ||
     localMovie.originalTitle ||
-    "Untitled";
+    "Без названия";
 
   const originalTitle =
     remoteMovie?.original_title ||
@@ -196,6 +208,7 @@ export default function Movie({
   const releaseDate =
     remoteMovie?.release_date ||
     localMovie.releaseDate ||
+    localMovie.release_date ||
     "";
 
   const year =
@@ -203,22 +216,47 @@ export default function Movie({
     localMovie.year ||
     "—";
 
+  const localGenres = Array.isArray(
+    localMovie.genres
+  )
+    ? localMovie.genres
+        .map((genre) =>
+          typeof genre === "string"
+            ? genre
+            : genre?.name
+        )
+        .filter(Boolean)
+        .join(" · ")
+    : "";
+
   const genres =
-    remoteMovie?.genres?.map((genre) => genre.name).join(" · ") ||
+    remoteMovie?.genres
+      ?.map((genre) => genre.name)
+      .filter(Boolean)
+      .join(" · ") ||
+    localGenres ||
     localMovie.genre ||
-    "Unknown";
+    "Неизвестно";
 
   const overview =
     remoteMovie?.overview ||
     localMovie.overview ||
-    "No description available.";
+    "Описание отсутствует.";
 
   const poster =
     localMovie.poster ||
-    getPoster(remoteMovie?.poster_path, "w780");
+    getPoster(
+      remoteMovie?.poster_path ||
+        localMovie.poster_path,
+      "w780"
+    );
 
   const backdrop =
-    getBackdrop(remoteMovie?.backdrop_path, "original") ||
+    getBackdrop(
+      remoteMovie?.backdrop_path ||
+        localMovie.backdrop_path,
+      "original"
+    ) ||
     localMovie.backdrop ||
     poster;
 
@@ -228,8 +266,9 @@ export default function Movie({
     null;
 
   const voteAverage =
-    remoteMovie?.vote_average ||
-    localMovie.voteAverage ||
+    remoteMovie?.vote_average ??
+    localMovie.voteAverage ??
+    localMovie.vote_average ??
     0;
 
   const director =
@@ -247,34 +286,151 @@ export default function Movie({
 
   const country =
     remoteMovie?.production_countries
-      ?.map((countryItem) => countryItem.iso_3166_1)
-      .join(" · ") ||
-    "";
+      ?.map(
+        (countryItem) =>
+          countryItem.iso_3166_1
+      )
+      .join(" · ") || "";
 
-  function saveEdit() {
-    onUpdateMovie?.(localMovie.id, {
-      status,
-      personalRating:
-        status === "watched" ? Number(youRating) : null,
-      youRating:
-        status === "watched" ? Number(youRating) : null,
-      herRating:
-        status === "watched" && Number(herRating) > 0
-          ? Number(herRating)
-          : null,
-      runtime:
-        Number(runtime) ||
-        localMovie.runtime ||
-        null,
-      director,
-    });
+  const currentRating =
+    localMovie.youRating != null
+      ? Number(localMovie.youRating)
+      : localMovie.personalRating != null
+      ? Number(localMovie.personalRating)
+      : null;
 
-    setEditing(false);
+  async function saveEdit() {
+    if (!localMovie?.id) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        throw userError;
+      }
+
+      if (!user) {
+        throw new Error(
+          "Сначала войди в аккаунт."
+        );
+      }
+
+      const newRating =
+        status === "watched"
+          ? Number(rating.toFixed(1))
+          : null;
+
+      const { error: updateError } =
+        await supabase
+          .from("user_movies")
+          .update({
+            status,
+            rating: newRating,
+          })
+          .eq("user_id", user.id)
+          .eq(
+            "tmdb_id",
+            Number(localMovie.id)
+          );
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      onUpdateMovie?.(localMovie.id, {
+        status,
+
+        // Temporary compatibility fields
+        // for the old UI components.
+        personalRating: newRating,
+        youRating: newRating,
+      });
+
+      setEditing(false);
+      setConfirmDelete(false);
+    } catch (error) {
+      console.error(
+        "Save movie error:",
+        error
+      );
+
+      setError(
+        error?.message ||
+          "Не удалось сохранить изменения."
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
-  function deleteFilm() {
-    onDeleteMovie?.(localMovie.id);
-    navigate("/films", { replace: true });
+  async function deleteFilm() {
+    if (!localMovie?.id) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        throw userError;
+      }
+
+      if (!user) {
+        throw new Error(
+          "Сначала войди в аккаунт."
+        );
+      }
+
+      /*
+       * IMPORTANT:
+       * We delete only this user's relation
+       * to the movie.
+       *
+       * The shared `movies` row must remain,
+       * because another user can have the same film.
+       */
+      const { error: deleteError } =
+        await supabase
+          .from("user_movies")
+          .delete()
+          .eq("user_id", user.id)
+          .eq(
+            "tmdb_id",
+            Number(localMovie.id)
+          );
+
+      if (deleteError) {
+        throw deleteError;
+      }
+
+      onDeleteMovie?.(localMovie.id);
+
+      navigate("/films", {
+        replace: true,
+      });
+    } catch (error) {
+      console.error(
+        "Delete movie error:",
+        error
+      );
+
+      setError(
+        error?.message ||
+          "Не удалось удалить фильм."
+      );
+
+      setLoading(false);
+    }
   }
 
   return (
@@ -311,11 +467,12 @@ export default function Movie({
                 strokeWidth={1.5}
                 className="transition-transform group-hover:-translate-x-1"
               />
+
               Back
             </button>
 
             <span className="cine-mono text-[8px] uppercase tracking-[0.18em] text-white/20">
-              CineLog / Film record
+              CineLog / Карточка фильма
             </span>
           </div>
 
@@ -341,7 +498,7 @@ export default function Movie({
 
               <div className="mt-4 flex items-center justify-between">
                 <span className="cine-mono text-[8px] uppercase tracking-[0.15em] text-white/25">
-                  Archive image
+                  Постер фильма
                 </span>
 
                 <span className="cine-mono text-[8px] uppercase tracking-[0.15em] text-white/25">
@@ -353,9 +510,10 @@ export default function Movie({
             <div className="flex min-w-0 flex-col justify-center">
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
                 <span className="cine-mono text-[9px] font-medium uppercase tracking-[0.17em] text-[var(--acid)]">
-                  {localMovie.status === "watched"
-                    ? "Watched"
-                    : "Watchlist"}
+                  {localMovie.status ===
+                  "watched"
+                    ? "Просмотрено"
+                    : "К просмотру"}
                 </span>
 
                 <span className="h-px w-8 bg-white/15" />
@@ -384,13 +542,18 @@ export default function Movie({
                 <span className="h-3 w-px bg-white/10" />
 
                 <span className="flex items-center gap-2 cine-mono text-[9px] uppercase tracking-[0.12em] text-white/45">
-                  <Clock3 size={13} strokeWidth={1.4} />
+                  <Clock3
+                    size={13}
+                    strokeWidth={1.4}
+                  />
+
                   {formatRuntime(runtime)}
                 </span>
 
                 {country && (
                   <>
                     <span className="h-3 w-px bg-white/10" />
+
                     <span className="cine-mono text-[9px] uppercase tracking-[0.12em] text-white/45">
                       {country}
                     </span>
@@ -401,7 +564,7 @@ export default function Movie({
               <div className="mt-10 grid max-w-[780px] grid-cols-2 gap-x-10 gap-y-8 md:grid-cols-3">
                 <div>
                   <p className="cine-mono text-[8px] uppercase tracking-[0.16em] text-white/25">
-                    TMDB rating
+                    Оценка TMDB
                   </p>
 
                   <div className="mt-2 flex items-center gap-2 font-serif text-3xl text-[#eeeae0]">
@@ -411,7 +574,11 @@ export default function Movie({
                       strokeWidth={1.2}
                       className="text-[var(--acid)]"
                     />
-                    {Number(voteAverage).toFixed(1)}
+
+                    {Number(
+                      voteAverage
+                    ).toFixed(1)}
+
                     <span className="cine-mono text-[8px] text-white/20">
                       / 10
                     </span>
@@ -419,29 +586,31 @@ export default function Movie({
                 </div>
 
                 <div>
-                  <p className="cine-mono text-[8px] uppercase tracking-[0.16em] text-white/25">Your rating</p>
-                  {localMovie.youRating != null || localMovie.personalRating != null ? (
-                    <div className="mt-2 font-serif text-3xl text-[#eeeae0]">
-                      {Number(localMovie.youRating ?? localMovie.personalRating).toFixed(1)}
-                      <span className="cine-mono ml-2 text-[8px] text-white/20">/ 10</span>
-                    </div>
-                  ) : <div className="mt-2 font-serif text-3xl text-white/20">—</div>}
-                </div>
+                  <p className="cine-mono text-[8px] uppercase tracking-[0.16em] text-white/25">
+                    Твоя оценка
+                  </p>
 
-                <div>
-                  <p className="cine-mono text-[8px] uppercase tracking-[0.16em] text-white/25">Her rating</p>
-                  {localMovie.herRating != null && Number(localMovie.herRating) > 0 ? (
+                  {currentRating != null ? (
                     <div className="mt-2 font-serif text-3xl text-[#eeeae0]">
-                      {Number(localMovie.herRating).toFixed(1)}
-                      <span className="cine-mono ml-2 text-[8px] text-white/20">/ 10</span>
+                      {Number(
+                        currentRating
+                      ).toFixed(1)}
+
+                      <span className="cine-mono ml-2 text-[8px] text-white/20">
+                        / 10
+                      </span>
                     </div>
-                  ) : <div className="mt-2 font-serif text-3xl text-white/20">—</div>}
+                  ) : (
+                    <div className="mt-2 font-serif text-3xl text-white/20">
+                      —
+                    </div>
+                  )}
                 </div>
 
                 {director && (
                   <div>
                     <p className="cine-mono text-[8px] uppercase tracking-[0.16em] text-white/25">
-                      Director
+                      Режиссёр
                     </p>
 
                     <div className="mt-2 flex items-center gap-2 text-sm text-[#eeeae0]">
@@ -450,6 +619,7 @@ export default function Movie({
                         strokeWidth={1.4}
                         className="text-white/35"
                       />
+
                       {director}
                     </div>
                   </div>
@@ -460,22 +630,33 @@ export default function Movie({
                 {overview}
               </p>
 
+              {error && !editing && (
+                <p className="mt-5 max-w-[720px] text-xs leading-5 text-red-300/70">
+                  {error}
+                </p>
+              )}
+
               <div className="mt-10 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => setEditing(true)}
+                  onClick={() => {
+                    setError("");
+                    setEditing(true);
+                  }}
                   className="cine-button cine-button--solid"
                 >
                   <Pencil size={14} />
-                  Edit record
+                  Изменить запись
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => navigate("/films")}
+                  onClick={() =>
+                    navigate("/films")
+                  }
                   className="cine-button"
                 >
-                  My films
+                  Мои фильмы
                 </button>
               </div>
             </div>
@@ -487,23 +668,29 @@ export default function Movie({
         <div className="grid grid-cols-2 md:grid-cols-4">
           {[
             {
-              label: "Release",
-              value: formatDate(releaseDate) || year,
-            },
-            {
-              label: "Runtime",
-              value: formatRuntime(runtime),
-            },
-            {
-              label: "Added to archive",
-              value: formatDate(localMovie.addedAt),
-            },
-            {
-              label: "Status",
+              label: "Премьера",
               value:
-                localMovie.status === "watched"
-                  ? "Watched"
-                  : "Watchlist",
+                formatDate(releaseDate) ||
+                year,
+            },
+            {
+              label: "Длительность",
+              value:
+                formatRuntime(runtime),
+            },
+            {
+              label: "Добавлено в архив",
+              value: formatDate(
+                localMovie.addedAt
+              ),
+            },
+            {
+              label: "Статус",
+              value:
+                localMovie.status ===
+                "watched"
+                  ? "Просмотрено"
+                  : "К просмотру",
             },
           ].map((item, index) => (
             <div
@@ -531,16 +718,16 @@ export default function Movie({
           <div className="flex items-end justify-between gap-8">
             <div>
               <p className="cine-mono text-[8px] uppercase tracking-[0.18em] text-[var(--acid)]">
-                Credits
+                Создатели
               </p>
 
               <h2 className="mt-3 font-serif text-4xl tracking-[-0.04em] text-[#eeeae0]">
-                Cast
+                В ролях
               </h2>
             </div>
 
             <span className="cine-mono text-[8px] uppercase tracking-[0.14em] text-white/20">
-              {cast.length} principal names
+              {cast.length} актёров
             </span>
           </div>
 
@@ -551,7 +738,9 @@ export default function Movie({
                 className="border-b border-r border-[var(--line)] px-4 py-5"
               >
                 <span className="cine-mono text-[8px] text-white/20">
-                  {String(index + 1).padStart(2, "0")}
+                  {String(
+                    index + 1
+                  ).padStart(2, "0")}
                 </span>
 
                 <p className="mt-5 text-sm leading-5 text-white/60">
@@ -567,43 +756,62 @@ export default function Movie({
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="cine-mono text-[8px] uppercase tracking-[0.18em] text-[var(--acid)]">
-              Archive record
+              Запись в архиве
             </p>
 
             <h2 className="mt-3 max-w-[700px] font-serif text-4xl leading-[0.95] tracking-[-0.04em] text-[#eeeae0] md:text-5xl">
-              One film, one record, kept in your archive.
+              Один фильм, одна запись в твоём архиве.
             </h2>
           </div>
 
           <button
             type="button"
-            onClick={() => setEditing(true)}
+            onClick={() => {
+              setError("");
+              setEditing(true);
+            }}
             className="cine-button shrink-0"
           >
             <Pencil size={14} />
-            Edit record
+            Изменить запись
           </button>
         </div>
       </section>
+
+      <MovieJournal
+        tmdbId={localMovie.id}
+        movieTitle={title}
+        currentRating={currentRating}
+      />
 
       {editing && (
         <div
           className="cine-modal-backdrop"
           onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
+            if (
+              event.target ===
+              event.currentTarget &&
+              !loading
+            ) {
               setEditing(false);
             }
           }}
         >
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{
+              opacity: 0,
+              y: 18,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
             className="cine-modal max-w-[620px]"
           >
             <div className="cine-modal__head">
               <div>
                 <p className="cine-kicker cine-accent">
-                  Edit archive record
+                  Изменение записи в архиве
                 </p>
 
                 <h2 className="cine-modal__title mt-2">
@@ -613,7 +821,11 @@ export default function Movie({
 
               <button
                 type="button"
-                onClick={() => setEditing(false)}
+                onClick={() =>
+                  !loading &&
+                  setEditing(false)
+                }
+                disabled={loading}
                 className="cine-close"
               >
                 <X size={17} />
@@ -621,14 +833,23 @@ export default function Movie({
             </div>
 
             <div className="cine-modal__body">
+              {error && (
+                <p className="mb-5 text-xs leading-5 text-red-300/70">
+                  {error}
+                </p>
+              )}
+
               <p className="cine-kicker">
-                Status
+                Статус
               </p>
 
               <div className="detail-choice-grid">
                 <button
                   type="button"
-                  onClick={() => setStatus("watched")}
+                  onClick={() =>
+                    setStatus("watched")
+                  }
+                  disabled={loading}
                   className={`detail-choice ${
                     status === "watched"
                       ? "is-active"
@@ -642,11 +863,12 @@ export default function Movie({
                         className="mr-2 inline"
                       />
                     )}
+
                     Watched
                   </strong>
 
                   <span>
-                    Keep it in your watched history.
+                    Добавить в историю просмотренных.
                   </span>
                 </button>
 
@@ -655,6 +877,7 @@ export default function Movie({
                   onClick={() =>
                     setStatus("watchlist")
                   }
+                  disabled={loading}
                   className={`detail-choice ${
                     status === "watchlist"
                       ? "is-active"
@@ -668,36 +891,62 @@ export default function Movie({
                         className="mr-2 inline"
                       />
                     )}
-                    Watchlist
+
+                    К просмотру
                   </strong>
 
                   <span>
-                    Move it back to your queue.
+                    Переместить в список «К просмотру».
                   </span>
                 </button>
               </div>
 
               {status === "watched" && (
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="rating-box">
-                    <div className="rating-box__top">
-                      <div><p className="cine-kicker cine-accent">Your rating</p></div>
-                      <div><span className="rating-value">{youRating.toFixed(1)}</span><span className="ml-1 text-xs text-white/25">/ 10</span></div>
+                <div className="rating-box">
+                  <div className="rating-box__top">
+                    <div>
+                      <p className="cine-kicker cine-accent">
+                        Твоя оценка
+                      </p>
                     </div>
-                    <input type="range" min="0" max="10" step="0.1" value={youRating}
-                      onChange={(event) => { const value = Number(event.target.value); setYouRating(value); setRating(value); }}
-                      className="rating-range" />
+
+                    <div>
+                      <span className="rating-value">
+                        {Number(
+                          rating
+                        ).toFixed(1)}
+                      </span>
+
+                      <span className="ml-1 text-xs text-white/25">
+                        / 10
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="rating-box">
-                    <div className="rating-box__top">
-                      <div><p className="cine-kicker">Her rating</p></div>
-                      <div><span className="rating-value">{herRating > 0 ? herRating.toFixed(1) : "—"}</span><span className="ml-1 text-xs text-white/25">/ 10</span></div>
-                    </div>
-                    <input type="range" min="0" max="10" step="0.1" value={herRating}
-                      onChange={(event) => setHerRating(Number(event.target.value))}
-                      className="rating-range" />
-                    <p className="mt-3 cine-mono text-[8px] uppercase tracking-[.12em] text-white/20">Set to 0 if not rated yet</p>
+                  <input
+                    type="range"
+                    min="0"
+                    max="10"
+                    step="0.1"
+                    value={rating}
+                    onChange={(event) =>
+                      setRating(
+                        Number(
+                          event.target.value
+                        )
+                      )
+                    }
+                    disabled={loading}
+                    className="rating-range"
+                  />
+
+                  <div className="mt-2 flex justify-between cine-mono text-[9px] text-white/20">
+                    <span>0</span>
+                    <span>2</span>
+                    <span>4</span>
+                    <span>6</span>
+                    <span>8</span>
+                    <span>10</span>
                   </div>
                 </div>
               )}
@@ -705,7 +954,10 @@ export default function Movie({
               <div className="modal-actions">
                 <button
                   type="button"
-                  onClick={() => setConfirmDelete(true)}
+                  onClick={() =>
+                    setConfirmDelete(true)
+                  }
+                  disabled={loading}
                   className="cine-button cine-button--danger mr-auto"
                 >
                   <Trash2 size={14} />
@@ -714,19 +966,30 @@ export default function Movie({
 
                 <button
                   type="button"
-                  onClick={() => setEditing(false)}
+                  onClick={() =>
+                    setEditing(false)
+                  }
+                  disabled={loading}
                   className="cine-button"
                 >
-                  Cancel
+                  Отмена
                 </button>
 
                 <button
                   type="button"
                   onClick={saveEdit}
+                  disabled={loading}
                   className="cine-button cine-button--solid"
                 >
-                  <Check size={14} />
-                  Save changes
+                  {loading ? (
+                    <div className="h-3.5 w-3.5 animate-spin rounded-full border border-white/20 border-t-white" />
+                  ) : (
+                    <Check size={14} />
+                  )}
+
+                  {loading
+                    ? "Сохраняем..."
+                    : "Сохранить изменения"}
                 </button>
               </div>
             </div>
@@ -740,8 +1003,14 @@ export default function Movie({
           style={{ zIndex: 120 }}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{
+              opacity: 0,
+              scale: 0.98,
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+            }}
             className="cine-modal max-w-[480px]"
           >
             <div className="cine-modal__body">
@@ -752,29 +1021,40 @@ export default function Movie({
               />
 
               <h2 className="cine-modal__title mt-5">
-                Delete this film?
+                Удалить этот фильм?
               </h2>
 
               <p className="mt-3 text-sm leading-6 text-white/35">
-                “{title}” will be removed from your
-                CineLog archive. This cannot be undone.
+                Фильм «{title}» будет удалён из твоего архива CineLog. Это действие нельзя отменить.
               </p>
+
+              {error && (
+                <p className="mt-4 text-xs leading-5 text-red-300/70">
+                  {error}
+                </p>
+              )}
 
               <div className="modal-actions">
                 <button
                   type="button"
-                  onClick={() => setConfirmDelete(false)}
+                  onClick={() =>
+                    setConfirmDelete(false)
+                  }
+                  disabled={loading}
                   className="cine-button"
                 >
-                  Cancel
+                  Отмена
                 </button>
 
                 <button
                   type="button"
                   onClick={deleteFilm}
+                  disabled={loading}
                   className="cine-button cine-button--danger"
                 >
-                  Delete movie
+                  {loading
+                    ? "Удаляем..."
+                    : "Удалить фильм"}
                 </button>
               </div>
             </div>

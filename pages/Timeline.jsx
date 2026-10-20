@@ -15,14 +15,14 @@ function formatTime(minutes) {
   const m = value % 60;
 
   if (h > 0) {
-    return m > 0 ? `${h}h ${m}m` : `${h}h`;
+    return m > 0 ? `${h} ч ${m} мин` : `${h} ч`;
   }
 
-  return `${m}m`;
+  return `${m} мин`;
 }
 
 function getTitle(movie) {
-  return movie.title || movie.name || "Untitled";
+  return movie.title || movie.name || "Без названия";
 }
 
 function getYear(movie) {
@@ -40,21 +40,31 @@ function getDate(movie) {
     : null;
 }
 
+function pluralizeMovies(count) {
+  const value = Math.abs(Number(count)) % 100;
+  const lastDigit = value % 10;
+
+  if (value >= 11 && value <= 14) return `${count} фильмов`;
+  if (lastDigit === 1) return `${count} фильм`;
+  if (lastDigit >= 2 && lastDigit <= 4) return `${count} фильма`;
+  return `${count} фильмов`;
+}
+
 function formatDate(movie) {
   const date = getDate(movie);
 
   if (!date || Number.isNaN(date.getTime())) {
-    return "Unknown date";
+    return "Дата неизвестна";
   }
 
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat("ru-RU", {
     day: "2-digit",
     month: "short",
     year: "numeric",
   }).format(date);
 }
 
-export default function Timeline({ movies = [] }) {
+export default function Timeline({ movies }) {
   const navigate = useNavigate();
 
   const timeline = [...movies].sort((a, b) => {
@@ -70,21 +80,20 @@ export default function Timeline({ movies = [] }) {
         <div className="cine-page-head__row">
           <div>
             <p className="cine-kicker">
-              Personal cinema archive / chronology
+              Личный киноархив / Хронология
             </p>
 
             <h1 className="cine-page-title">
-              Timeline
+              Хронология
             </h1>
 
             <p className="cine-page-subtitle">
-              Every film added to the archive, arranged
-              chronologically.
+              Все фильмы твоего архива в хронологическом порядке.
             </p>
           </div>
 
           <div className="cine-mono text-[9px] uppercase tracking-[.16em] text-white/25">
-            {movies.length} films
+            {pluralizeMovies(movies.length)}
           </div>
         </div>
       </header>
@@ -93,16 +102,7 @@ export default function Timeline({ movies = [] }) {
         {timeline.length ? (
           <div className="relative border-t border-white/[.13]">
             {timeline.map((movie, index) => {
-              const rating = Number(
-                movie.youRating ??
-                  movie.personalRating ??
-                  0
-              );
-
-              const herRating = Number(
-                movie.herRating ?? 0
-              );
-
+              const rating = Number(movie.personalRating);
               const title = getTitle(movie);
 
               return (
@@ -251,9 +251,10 @@ export default function Timeline({ movies = [] }) {
                             <span className="h-1 w-1 bg-white/15" />
 
                             <span className="cine-mono text-[8px] uppercase tracking-[.12em] text-white/20">
-                              {movie.status === "watchlist"
-                                ? "Watchlist"
-                                : "Watched"}
+                              {movie.status ===
+                              "watchlist"
+                                ? "К просмотру"
+                                : "Просмотрено"}
                             </span>
                           </>
                         )}
@@ -266,39 +267,21 @@ export default function Timeline({ movies = [] }) {
                       )}
                     </div>
 
-                    {/* RATINGS */}
+                    {/* RATING */}
 
                     <div className="self-center text-right">
-                      {rating > 0 || herRating > 0 ? (
-                        <div className="flex flex-col items-end gap-2">
-                          {rating > 0 && (
-                            <div className="flex items-center justify-end gap-2">
-                              <Star
-                                size={12}
-                                strokeWidth={1.5}
-                                fill="currentColor"
-                                className="text-[var(--acid)]"
-                              />
+                      {rating > 0 ? (
+                        <div className="flex items-center justify-end gap-2">
+                          <Star
+                            size={12}
+                            strokeWidth={1.5}
+                            fill="currentColor"
+                            className="text-[var(--acid)]"
+                          />
 
-                              <span className="cine-mono text-[10px] text-[var(--acid)]">
-                                {rating.toFixed(1)}
-                              </span>
-
-                              <span className="cine-mono text-[7px] uppercase tracking-[.1em] text-white/20">
-                                You
-                              </span>
-                            </div>
-                          )}
-
-                          {herRating > 0 && (
-                            <div className="cine-mono text-[9px] text-white/35">
-                              {herRating.toFixed(1)}
-
-                              <span className="ml-2 text-[7px] uppercase tracking-[.1em] text-white/20">
-                                Her
-                              </span>
-                            </div>
-                          )}
+                          <span className="cine-mono text-[10px] text-[var(--acid)]">
+                            {rating.toFixed(1)}
+                          </span>
                         </div>
                       ) : (
                         <span className="cine-mono text-[8px] uppercase tracking-[.1em] text-white/15">
@@ -321,12 +304,11 @@ export default function Timeline({ movies = [] }) {
               />
 
               <h2 className="cine-empty__title">
-                Timeline is empty
+                История пока пуста
               </h2>
 
               <p className="cine-empty__text">
-                Add films to start building your
-                personal cinema chronology.
+                Добавляй фильмы, чтобы здесь появилась история твоих просмотров.
               </p>
             </div>
           </div>

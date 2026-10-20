@@ -10,17 +10,17 @@ import {
 import MovieCard from "../components/MovieCard";
 
 const FILTERS = [
-  { key: "all", label: "All" },
-  { key: "watched", label: "Watched" },
-  { key: "watchlist", label: "Watchlist" },
+  { key: "all", label: "Все" },
+  { key: "watched", label: "Просмотрено" },
+  { key: "watchlist", label: "К просмотру" },
 ];
 
 const SORTS = [
-  { key: "recent", label: "Recently added" },
-  { key: "oldest", label: "Oldest added" },
-  { key: "rating", label: "Highest rated" },
-  { key: "title", label: "Title A-Z" },
-  { key: "year", label: "Release year" },
+  { key: "recent", label: "Недавно добавленные" },
+  { key: "oldest", label: "Сначала старые" },
+  { key: "rating", label: "С лучшей оценкой" },
+  { key: "title", label: "Название: А–Я" },
+  { key: "year", label: "Год выхода" },
 ];
 
 export default function Films({
@@ -61,16 +61,8 @@ export default function Films({
 
       if (sort === "rating") {
         return (
-          (Number(
-            b.youRating ??
-              b.personalRating ??
-              0
-          ) || 0) -
-          (Number(
-            a.youRating ??
-              a.personalRating ??
-              0
-          ) || 0)
+          (Number(b.personalRating) || 0) -
+          (Number(a.personalRating) || 0)
         );
       }
 
@@ -111,21 +103,21 @@ export default function Films({
 
   return (
     <div className="cine-page">
+      {/* PAGE HEADER */}
+
       <section className="border-b border-white/[.13] py-14 md:py-16">
         <div className="flex flex-col gap-10 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="cine-kicker cine-accent">
-              Personal archive / Library
+              Личный архив / Коллекция
             </p>
 
             <h1 className="cine-page-title mt-4">
-              Films
+              Фильмы
             </h1>
 
             <p className="cine-page-subtitle">
-              The complete collection. Search it, sort it,
-              filter it, and open any title for its full
-              cinematic record.
+              Вся коллекция. Ищи, сортируй и фильтруй фильмы, чтобы изучить их подробнее.
             </p>
           </div>
 
@@ -161,13 +153,17 @@ export default function Films({
               strokeWidth={2}
             />
 
-            Add film
+            Добавить фильм
           </button>
         </div>
       </section>
 
+      {/* TOOLBAR */}
+
       <section className="border-b border-white/[.13] py-6">
         <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
+          {/* SEARCH */}
+
           <div className="relative w-full xl:max-w-[460px]">
             <Search
               size={17}
@@ -188,7 +184,7 @@ export default function Films({
               onChange={(event) =>
                 setQuery(event.target.value)
               }
-              placeholder="Search your archive..."
+              placeholder="Поиск по архиву..."
               className="
                 h-[48px]
                 w-full
@@ -214,7 +210,7 @@ export default function Films({
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                aria-label="Clear search"
+                aria-label="Очистить поиск"
                 className="
                   absolute
                   right-0
@@ -237,10 +233,11 @@ export default function Films({
             )}
           </div>
 
+          {/* FILTERS */}
+
           <div className="flex items-center gap-7 overflow-x-auto">
             {FILTERS.map((item) => {
-              const active =
-                filter === item.key;
+              const active = filter === item.key;
 
               return (
                 <button
@@ -309,6 +306,8 @@ export default function Films({
             })}
           </div>
 
+          {/* SORT */}
+
           <div className="relative shrink-0">
             <ArrowDownUp
               size={13}
@@ -364,28 +363,32 @@ export default function Films({
         </div>
       </section>
 
+      {/* RESULTS */}
+
       <section className="pt-10">
         <div className="mb-8 flex flex-col gap-4 border-b border-white/[.13] pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span className="cine-mono text-[9px] uppercase tracking-[.17em] text-white/30">
               {list.length}{" "}
-              {list.length === 1
-                ? "result"
-                : "results"}
+              {list.length % 10 === 1 && list.length % 100 !== 11
+                ? "результат"
+                : list.length % 10 >= 2 && list.length % 10 <= 4 && (list.length % 100 < 12 || list.length % 100 > 14)
+                ? "результата"
+                : "результатов"}
             </span>
 
             <h2 className="mt-2 cine-serif text-4xl tracking-[-.035em] text-[#eeeae0] md:text-5xl">
               {filter === "all"
-                ? "Complete archive"
+                ? "Весь архив"
                 : filter === "watched"
-                  ? "Watched films"
-                  : "Watchlist"}
+                ? "Просмотренные фильмы"
+                : "К просмотру"}
             </h2>
           </div>
 
           {query && (
             <span className="cine-mono text-[9px] uppercase tracking-[.13em] text-white/30">
-              Search: “{query}”
+              Поиск: «{query}»
             </span>
           )}
         </div>
@@ -409,13 +412,11 @@ export default function Films({
             />
 
             <h2 className="mt-6 cine-serif text-4xl tracking-[-.035em] text-[#eeeae0]">
-              Nothing matches.
+              Ничего не найдено.
             </h2>
 
             <p className="mx-auto mt-4 max-w-[500px] text-sm leading-6 text-white/35">
-              Try another title or switch the archive
-              filter. If the collection is empty, add a
-              film through TMDB.
+              Попробуй другое название или измени фильтр. Если архив пуст, добавь фильм через TMDB.
             </p>
 
             <button
@@ -449,7 +450,7 @@ export default function Films({
                 strokeWidth={2}
               />
 
-              Add film
+              Добавить фильм
             </button>
           </div>
         )}

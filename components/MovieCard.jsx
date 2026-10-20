@@ -9,7 +9,7 @@ export default function MovieCard({ movie, index = 0 }) {
     movie.title ||
     movie.name ||
     movie.originalTitle ||
-    "Untitled";
+    "Без названия";
 
   const year =
     movie.release_date?.slice(0, 4) ||
@@ -23,8 +23,8 @@ export default function MovieCard({ movie, index = 0 }) {
 
   const status =
     movie.status === "watchlist"
-      ? "Watchlist"
-      : "Watched";
+      ? "К просмотру"
+      : "Просмотрено";
 
   // Поддерживаем оба варианта:
   // TMDB poster_path = "/abc.jpg"
@@ -78,7 +78,7 @@ export default function MovieCard({ movie, index = 0 }) {
         ) : (
           <div className="flex h-full w-full items-center justify-center border border-[var(--line)] bg-[#101310]">
             <span className="cine-mono text-[8px] uppercase tracking-[.16em] text-white/25">
-              No poster
+              Нет постера
             </span>
           </div>
         )}
@@ -193,7 +193,7 @@ export default function MovieCard({ movie, index = 0 }) {
                 text-white/20
               "
             >
-              My rating
+              Моя оценка
             </span>
           ) : (
             <span
