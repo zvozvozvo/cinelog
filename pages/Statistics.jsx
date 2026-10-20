@@ -9,6 +9,7 @@ import {
   Star,
   Trophy,
   TrendingUp,
+  Heart,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -29,6 +30,21 @@ function formatTime(minutes) {
   }
 
   return `${remaining}m`;
+}
+
+
+function getYouRating(movie) {
+  const value = Number(
+    movie.youRating ?? movie.personalRating
+  );
+
+  return Number.isFinite(value) ? value : 0;
+}
+
+function getHerRating(movie) {
+  const value = Number(movie.herRating);
+
+  return Number.isFinite(value) ? value : 0;
 }
 
 function StatBlock({ icon, value, label, detail }) {
@@ -86,7 +102,7 @@ export default function Statistics({ movies = [] }) {
     () =>
       watched.filter(
         (movie) =>
-          Number(movie.personalRating) > 0
+          getYouRating(movie) > 0
       ),
     [watched]
   );
@@ -110,7 +126,7 @@ export default function Statistics({ movies = [] }) {
       ratedMovies.length > 0
         ? ratedMovies.reduce(
             (sum, movie) =>
-              sum + Number(movie.personalRating),
+              sum + getYouRating(movie),
             0
           ) / ratedMovies.length
         : 0;
@@ -119,8 +135,8 @@ export default function Statistics({ movies = [] }) {
       ratedMovies.length > 0
         ? [...ratedMovies].sort(
             (a, b) =>
-              Number(b.personalRating) -
-              Number(a.personalRating)
+              getYouRating(b) -
+              getYouRating(a)
           )[0]
         : null;
 
@@ -158,9 +174,7 @@ export default function Statistics({ movies = [] }) {
     return ranges.map((range) => ({
       ...range,
       count: ratedMovies.filter((movie) => {
-        const rating = Number(
-          movie.personalRating
-        );
+        const rating = getYouRating(movie);
 
         return (
           rating >= range.min &&
@@ -242,6 +256,64 @@ export default function Statistics({ movies = [] }) {
     ),
     1
   );
+
+
+  const togetherStats = useMemo(() => {
+    const shared = watched.filter(
+      (movie) =>
+        getYouRating(movie) > 0 &&
+        getHerRating(movie) > 0
+    );
+
+    const youAverage =
+      shared.length > 0
+        ? shared.reduce(
+            (sum, movie) =>
+              sum + getYouRating(movie),
+            0
+          ) / shared.length
+        : 0;
+
+    const herAverage =
+      shared.length > 0
+        ? shared.reduce(
+            (sum, movie) =>
+              sum + getHerRating(movie),
+            0
+          ) / shared.length
+        : 0;
+
+    const averageDifference =
+      shared.length > 0
+        ? shared.reduce(
+            (sum, movie) =>
+              sum +
+              Math.abs(
+                getYouRating(movie) -
+                  getHerRating(movie)
+              ),
+            0
+          ) / shared.length
+        : 0;
+
+    const match =
+      shared.length > 0
+        ? Math.max(
+            0,
+            Math.min(
+              100,
+              100 - averageDifference * 10
+            )
+          )
+        : 0;
+
+    return {
+      shared,
+      youAverage,
+      herAverage,
+      match,
+    };
+  }, [watched]);
 
   const recentActivity = useMemo(
     () =>
@@ -329,9 +401,7 @@ export default function Statistics({ movies = [] }) {
             }
             value={
               stats.highestRated
-                ? Number(
-                    stats.highestRated.personalRating
-                  ).toFixed(1)
+                ? getYouRating(stats.highestRated).toFixed(1)
                 : "—"
             }
             label="Highest rating"
@@ -583,6 +653,61 @@ export default function Statistics({ movies = [] }) {
         )}
       </section>
 
+      {/* TOGETHER */}
+
+      <section className="mt-16">
+        <div className="mb-7 flex items-end justify-between border-b border-white/[.13] pb-5">
+          <div className="flex items-baseline gap-4">
+            <span className="cine-mono text-[9px] tracking-[.12em] text-[var(--acid)]">
+              04
+            </span>
+
+            <h2 className="cine-serif text-4xl tracking-[-.035em] text-[var(--paper)]">
+              Our cinema
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => navigate("/together")}
+            className="cine-mono text-[9px] uppercase tracking-[.14em] text-white/25 transition-colors hover:text-[var(--acid)]"
+          >
+            Open together →
+          </button>
+        </div>
+
+        {togetherStats.shared.length > 0 ? (
+          <div className="grid gap-px border border-white/[.10] bg-white/[.10] sm:grid-cols-3">
+            <StatBlock
+              icon={<Heart size={17} strokeWidth={1.5} />}
+              value={`${togetherStats.match.toFixed(0)}%`}
+              label="Taste match"
+              detail={`${togetherStats.shared.length} films rated by both`}
+            />
+
+            <StatBlock
+              icon={<Star size={17} strokeWidth={1.5} />}
+              value={togetherStats.youAverage.toFixed(1)}
+              label="Your average"
+              detail="Across films rated by both"
+            />
+
+            <StatBlock
+              icon={<Star size={17} strokeWidth={1.5} />}
+              value={togetherStats.herAverage.toFixed(1)}
+              label="Her average"
+              detail="Across films rated by both"
+            />
+          </div>
+        ) : (
+          <div className="border-y border-dashed border-white/[.10] py-16 text-center">
+            <p className="cine-mono text-[9px] uppercase tracking-[.12em] text-white/20">
+              Rate the same watched films to build your shared cinema profile.
+            </p>
+          </div>
+        )}
+      </section>
+
       {/* RECORDS */}
 
       <section className="mt-16 grid gap-12 lg:grid-cols-[.85fr_1.15fr]">
@@ -592,7 +717,7 @@ export default function Statistics({ movies = [] }) {
           <div className="mb-7 flex items-end justify-between border-b border-white/[.13] pb-5">
             <div className="flex items-baseline gap-4">
               <span className="cine-mono text-[9px] tracking-[.12em] text-[var(--acid)]">
-                04
+                06
               </span>
 
               <h2 className="cine-serif text-4xl tracking-[-.035em] text-[var(--paper)]">
