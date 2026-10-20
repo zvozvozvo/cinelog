@@ -1,0 +1,584 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@500;600;700&display=swap");
+
+@import "tailwindcss";
+
+/* =========================================================
+   CINELOG DESIGN TOKENS
+   ========================================================= */
+
+:root {
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  color: var(--paper);
+  background: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --bg: #070907;
+  --surface: #0c100d;
+  --surface-2: #101610;
+  --surface-3: #141b14;
+
+  --paper: #f1f0e9;
+  --muted: #a0a79f;
+  --faint: #656c64;
+
+  --line: rgba(241, 240, 233, 0.12);
+  --line-strong: rgba(241, 240, 233, 0.19);
+
+  --acid: #b9f45a;
+  --acid-soft: rgba(185, 244, 90, 0.1);
+
+  --danger: #ff766d;
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--paper);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--acid);
+  color: #071006;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #293129;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--acid);
+}
+
+* {
+  scrollbar-color: #293129 var(--bg);
+  scrollbar-width: thin;
+}
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+.cine-serif {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.cine-mono {
+  font-family: "DM Mono", monospace;
+}
+
+.cine-kicker {
+  color: var(--muted);
+  font: 500 10px/1.2 "DM Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.cine-accent {
+  color: var(--acid);
+}
+
+.cine-rule {
+  width: 100%;
+  height: 1px;
+  background: var(--line);
+}
+
+/* =========================================================
+   MAIN SHELL
+   ========================================================= */
+
+.cine-shell {
+  width: min(100%, 1940px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 clamp(22px, 3vw, 56px);
+}
+
+.cine-page {
+  padding-bottom: 92px;
+}
+
+.cine-page-head {
+  padding: 58px 0 46px;
+  border-bottom: 1px solid var(--line);
+}
+
+.cine-page-head__row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.cine-page-title {
+  margin: 0;
+  font: 600 clamp(3.4rem, 7vw, 7.8rem) / 0.88
+    "Playfair Display", Georgia, serif;
+  letter-spacing: -0.055em;
+}
+
+.cine-page-subtitle {
+  max-width: 680px;
+  margin: 22px 0 0;
+  color: rgba(241, 240, 233, 0.5);
+  font-size: 15px;
+  line-height: 1.78;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.cine-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  min-height: 46px;
+  padding: 0 18px;
+
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+
+  background: transparent;
+  color: var(--paper);
+
+  font: 700 10px/1 "DM Mono", monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.cine-button:hover {
+  border-color: rgba(185, 244, 90, 0.45);
+  color: var(--acid);
+  background: rgba(255, 255, 255, 0.025);
+  transform: translateY(-1px);
+}
+
+.cine-button:active {
+  transform: translateY(0);
+}
+
+.cine-button--solid {
+  border-color: var(--acid);
+  background: var(--acid);
+  color: #081006;
+}
+
+.cine-button--solid:hover {
+  border-color: #c8ff73;
+  background: #c8ff73;
+  color: #081006;
+}
+
+.cine-button--danger {
+  border-color: rgba(255, 118, 109, 0.25);
+  background: transparent;
+  color: #ff9a93;
+}
+
+.cine-button--danger:hover {
+  border-color: rgba(255, 118, 109, 0.45);
+  background: rgba(255, 118, 109, 0.04);
+  color: #ffb0aa;
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.cine-panel {
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.cine-panel--flat {
+  border-color: var(--line);
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.cine-panel--accent {
+  border-color: rgba(185, 244, 90, 0.24);
+  background: rgba(185, 244, 90, 0.035);
+}
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.cine-toolbar {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto auto;
+  gap: 18px;
+  align-items: center;
+
+  margin-top: 26px;
+  padding: 16px 0;
+
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  background: transparent;
+}
+
+.cine-input {
+  width: 100%;
+  min-height: 46px;
+
+  padding: 0 2px;
+
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  border-radius: 0;
+
+  outline: none;
+  background: transparent;
+  color: var(--paper);
+
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.cine-input::placeholder {
+  color: rgba(241, 240, 233, 0.24);
+}
+
+.cine-input:focus {
+  border-bottom-color: var(--acid);
+}
+
+.cine-select {
+  min-height: 42px;
+
+  appearance: none;
+
+  padding: 0 30px 0 2px;
+
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  border-radius: 0;
+
+  outline: none;
+
+  background: transparent;
+  color: rgba(241, 240, 233, 0.68);
+
+  font: 500 9px/1 "DM Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cine-select:focus {
+  border-bottom-color: var(--acid);
+}
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.cine-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cine-tab {
+  min-height: 38px;
+  padding: 0 11px;
+
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+
+  background: transparent;
+  color: rgba(241, 240, 233, 0.35);
+
+  font: 500 9px/1 "DM Mono", monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.cine-tab:hover {
+  color: var(--paper);
+}
+
+.cine-tab.is-active {
+  border-bottom-color: var(--acid);
+  color: var(--acid);
+}
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.cine-section {
+  margin-top: 72px;
+}
+
+.cine-section__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.cine-section__title {
+  margin: 0;
+
+  font: 600 clamp(2rem, 3vw, 3.3rem) / 1
+    "Playfair Display", Georgia, serif;
+
+  letter-spacing: -0.045em;
+}
+
+.cine-section__meta {
+  color: rgba(241, 240, 233, 0.3);
+
+  font: 500 9px/1 "DM Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+}
+
+/* =========================================================
+   MOVIE GRID
+   ========================================================= */
+
+.cine-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 38px 18px;
+}
+
+.cine-grid--wide {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.cine-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 300px;
+
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  background: transparent;
+  text-align: center;
+}
+
+.cine-empty__inner {
+  max-width: 480px;
+  padding: 48px 24px;
+}
+
+.cine-empty__title {
+  margin: 18px 0 0;
+
+  font: 600 32px/1 "Playfair Display", Georgia, serif;
+  letter-spacing: -0.035em;
+}
+
+.cine-empty__text {
+  margin: 12px 0 0;
+
+  color: rgba(241, 240, 233, 0.38);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   MOBILE NAV
+   ========================================================= */
+
+.cine-mobile-nav {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cine-mobile-nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 1px solid var(--acid);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1280px) {
+  .cine-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .cine-grid--wide {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .cine-page-head__row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cine-toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cine-toolbar__search {
+    grid-column: 1 / -1;
+  }
+
+  .cine-grid,
+  .cine-grid--wide {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .cine-shell {
+    padding: 0 16px;
+  }
+
+  .cine-page {
+    padding-bottom: 68px;
+  }
+
+  .cine-page-head {
+    padding: 38px 0 32px;
+  }
+
+  .cine-page-title {
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+
+  .cine-page-subtitle {
+    font-size: 14px;
+  }
+
+  .cine-toolbar {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .cine-toolbar__search {
+    grid-column: auto;
+  }
+
+  .cine-grid,
+  .cine-grid--wide {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px 12px;
+  }
+
+  .cine-section {
+    margin-top: 52px;
+  }
+
+  .cine-section__head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cine-button {
+    min-height: 44px;
+  }
+}
