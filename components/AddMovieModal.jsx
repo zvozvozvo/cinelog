@@ -204,7 +204,25 @@ export default function AddMovieModal({ onClose, onAdd }) {
                       setQuery(event.target.value)
                     }
                     placeholder="Search title, original title..."
-                    className="cine-input pl-7 pr-10"
+                    className="
+                      w-full
+                      border-0
+                      border-b
+                      border-[var(--line)]
+                      bg-transparent
+                      px-0
+                      py-4
+                      pl-7
+                      pr-10
+                      text-[15px]
+                      text-[var(--paper)]
+                      outline-none
+                      ring-0
+                      placeholder:text-white/20
+                      focus:border-[var(--paper)]
+                      focus:outline-none
+                      focus:ring-0
+                    "
                   />
 
                   {searching && (
