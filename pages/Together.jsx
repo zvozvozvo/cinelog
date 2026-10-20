@@ -100,9 +100,8 @@ export default function Together({ movies = [] }) {
             </h1>
 
             <p className="mt-7 max-w-[620px] text-[15px] leading-7 text-white/35">
-              A shared archive for two people who apparently
-              decided that arguing about movies needed its own
-              database.
+              A shared cinema archive for two people.
+              Compare ratings, find common favorites, and see where your tastes diverge.
             </p>
           </div>
 
