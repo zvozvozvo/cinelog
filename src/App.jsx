@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import AddMovieModal from "../components/AddMovieModal";
+
 import Together from "../pages/Together";
 import Home from "../pages/Home";
 import Films from "../pages/Films";
@@ -77,6 +78,7 @@ export default function App() {
 
         <div className="min-h-[calc(100vh-92px)]">
           <Routes>
+            {/* HOME */}
             <Route
               path="/"
               element={
@@ -87,6 +89,7 @@ export default function App() {
               }
             />
 
+            {/* FILMS */}
             <Route
               path="/films"
               element={
@@ -97,6 +100,7 @@ export default function App() {
               }
             />
 
+            {/* WATCHLIST */}
             <Route
               path="/watchlist"
               element={
@@ -107,16 +111,25 @@ export default function App() {
               }
             />
 
+            {/* TIMELINE */}
             <Route
               path="/timeline"
               element={<Timeline movies={movies} />}
             />
 
+            {/* STATISTICS */}
             <Route
               path="/statistics"
               element={<Statistics movies={movies} />}
             />
 
+            {/* TOGETHER */}
+            <Route
+              path="/together"
+              element={<Together movies={movies} />}
+            />
+
+            {/* MOVIE */}
             <Route
               path="/movie/:id"
               element={
