@@ -61,8 +61,16 @@ export default function Films({
 
       if (sort === "rating") {
         return (
-          (Number(b.personalRating) || 0) -
-          (Number(a.personalRating) || 0)
+          (Number(
+            b.youRating ??
+              b.personalRating ??
+              0
+          ) || 0) -
+          (Number(
+            a.youRating ??
+              a.personalRating ??
+              0
+          ) || 0)
         );
       }
 
@@ -103,8 +111,6 @@ export default function Films({
 
   return (
     <div className="cine-page">
-      {/* PAGE HEADER */}
-
       <section className="border-b border-white/[.13] py-14 md:py-16">
         <div className="flex flex-col gap-10 xl:flex-row xl:items-end xl:justify-between">
           <div>
@@ -160,12 +166,8 @@ export default function Films({
         </div>
       </section>
 
-      {/* TOOLBAR */}
-
       <section className="border-b border-white/[.13] py-6">
         <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
-          {/* SEARCH */}
-
           <div className="relative w-full xl:max-w-[460px]">
             <Search
               size={17}
@@ -235,11 +237,10 @@ export default function Films({
             )}
           </div>
 
-          {/* FILTERS */}
-
           <div className="flex items-center gap-7 overflow-x-auto">
             {FILTERS.map((item) => {
-              const active = filter === item.key;
+              const active =
+                filter === item.key;
 
               return (
                 <button
@@ -308,8 +309,6 @@ export default function Films({
             })}
           </div>
 
-          {/* SORT */}
-
           <div className="relative shrink-0">
             <ArrowDownUp
               size={13}
@@ -365,8 +364,6 @@ export default function Films({
         </div>
       </section>
 
-      {/* RESULTS */}
-
       <section className="pt-10">
         <div className="mb-8 flex flex-col gap-4 border-b border-white/[.13] pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -381,8 +378,8 @@ export default function Films({
               {filter === "all"
                 ? "Complete archive"
                 : filter === "watched"
-                ? "Watched films"
-                : "Watchlist"}
+                  ? "Watched films"
+                  : "Watchlist"}
             </h2>
           </div>
 
