@@ -10,7 +10,7 @@ ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
   <React.StrictMode>
-    <BrowserRouter basename="/cinelog">
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </React.StrictMode>
