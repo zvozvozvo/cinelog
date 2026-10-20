@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import AddMovieModal from "../components/AddMovieModal";
-
+import Together from "../pages/Together";
 import Home from "../pages/Home";
 import Films from "../pages/Films";
 import Watchlist from "../pages/Watchlist";
