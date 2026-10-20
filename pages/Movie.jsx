@@ -77,6 +77,18 @@ export default function Movie({
     Number(localMovie?.personalRating) || 8
   );
 
+  const [youRating, setYouRating] = useState(
+    localMovie?.youRating != null
+      ? Number(localMovie.youRating)
+      : localMovie?.personalRating != null
+        ? Number(localMovie.personalRating)
+        : 8
+  );
+
+  const [herRating, setHerRating] = useState(
+    localMovie?.herRating != null ? Number(localMovie.herRating) : 0
+  );
+
   useEffect(() => {
     let active = true;
 
@@ -107,11 +119,23 @@ export default function Movie({
 
   useEffect(() => {
     setStatus(localMovie?.status || "watched");
-    setRating(Number(localMovie?.personalRating) || 8);
+
+    const nextYouRating =
+      localMovie?.youRating != null
+        ? Number(localMovie.youRating)
+        : localMovie?.personalRating != null
+          ? Number(localMovie.personalRating)
+          : 8;
+
+    setRating(nextYouRating);
+    setYouRating(nextYouRating);
+    setHerRating(localMovie?.herRating != null ? Number(localMovie.herRating) : 0);
   }, [
     localMovie?.id,
     localMovie?.status,
     localMovie?.personalRating,
+    localMovie?.youRating,
+    localMovie?.herRating,
   ]);
 
   if (!localMovie && loading) {
@@ -231,8 +255,12 @@ export default function Movie({
     onUpdateMovie?.(localMovie.id, {
       status,
       personalRating:
-        status === "watched"
-          ? Number(rating)
+        status === "watched" ? Number(youRating) : null,
+      youRating:
+        status === "watched" ? Number(youRating) : null,
+      herRating:
+        status === "watched" && Number(herRating) > 0
+          ? Number(herRating)
           : null,
       runtime:
         Number(runtime) ||
@@ -391,24 +419,23 @@ export default function Movie({
                 </div>
 
                 <div>
-                  <p className="cine-mono text-[8px] uppercase tracking-[0.16em] text-white/25">
-                    Your rating
-                  </p>
-
-                  {localMovie.personalRating != null ? (
+                  <p className="cine-mono text-[8px] uppercase tracking-[0.16em] text-white/25">Your rating</p>
+                  {localMovie.youRating != null || localMovie.personalRating != null ? (
                     <div className="mt-2 font-serif text-3xl text-[#eeeae0]">
-                      {Number(
-                        localMovie.personalRating
-                      ).toFixed(1)}
-                      <span className="cine-mono ml-2 text-[8px] text-white/20">
-                        / 10
-                      </span>
+                      {Number(localMovie.youRating ?? localMovie.personalRating).toFixed(1)}
+                      <span className="cine-mono ml-2 text-[8px] text-white/20">/ 10</span>
                     </div>
-                  ) : (
-                    <div className="mt-2 font-serif text-3xl text-white/20">
-                      —
+                  ) : <div className="mt-2 font-serif text-3xl text-white/20">—</div>}
+                </div>
+
+                <div>
+                  <p className="cine-mono text-[8px] uppercase tracking-[0.16em] text-white/25">Her rating</p>
+                  {localMovie.herRating != null && Number(localMovie.herRating) > 0 ? (
+                    <div className="mt-2 font-serif text-3xl text-[#eeeae0]">
+                      {Number(localMovie.herRating).toFixed(1)}
+                      <span className="cine-mono ml-2 text-[8px] text-white/20">/ 10</span>
                     </div>
-                  )}
+                  ) : <div className="mt-2 font-serif text-3xl text-white/20">—</div>}
                 </div>
 
                 {director && (
@@ -651,38 +678,27 @@ export default function Movie({
               </div>
 
               {status === "watched" && (
-                <div className="rating-box">
-                  <div className="rating-box__top">
-                    <div>
-                      <p className="cine-kicker cine-accent">
-                        Your rating
-                      </p>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="rating-box">
+                    <div className="rating-box__top">
+                      <div><p className="cine-kicker cine-accent">Your rating</p></div>
+                      <div><span className="rating-value">{youRating.toFixed(1)}</span><span className="ml-1 text-xs text-white/25">/ 10</span></div>
                     </div>
-
-                    <div>
-                      <span className="rating-value">
-                        {rating.toFixed(1)}
-                      </span>
-
-                      <span className="ml-1 text-xs text-white/25">
-                        / 10
-                      </span>
-                    </div>
+                    <input type="range" min="0" max="10" step="0.1" value={youRating}
+                      onChange={(event) => { const value = Number(event.target.value); setYouRating(value); setRating(value); }}
+                      className="rating-range" />
                   </div>
 
-                  <input
-                    type="range"
-                    min="0"
-                    max="10"
-                    step="0.1"
-                    value={rating}
-                    onChange={(event) =>
-                      setRating(
-                        Number(event.target.value)
-                      )
-                    }
-                    className="rating-range"
-                  />
+                  <div className="rating-box">
+                    <div className="rating-box__top">
+                      <div><p className="cine-kicker">Her rating</p></div>
+                      <div><span className="rating-value">{herRating > 0 ? herRating.toFixed(1) : "—"}</span><span className="ml-1 text-xs text-white/25">/ 10</span></div>
+                    </div>
+                    <input type="range" min="0" max="10" step="0.1" value={herRating}
+                      onChange={(event) => setHerRating(Number(event.target.value))}
+                      className="rating-range" />
+                    <p className="mt-3 cine-mono text-[8px] uppercase tracking-[.12em] text-white/20">Set to 0 if not rated yet</p>
+                  </div>
                 </div>
               )}
 
