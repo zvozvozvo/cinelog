@@ -4,43 +4,42 @@ const TMDB_TOKEN = rawToken
   ?.trim()
   .replace(/^Bearer\s+/i, "");
 
-console.log(
-  "TMDB TOKEN:",
-  TMDB_TOKEN ? "НАЙДЕН" : "НЕ НАЙДЕН"
-);
-
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 
 async function tmdbRequest(endpoint) {
   if (!TMDB_TOKEN) {
     throw new Error(
-      "TMDB_TOKEN не найден. Проверь .env и перезапусти Vite."
+      "TMDB token is missing. Check your environment settings."
     );
   }
 
-  const response = await fetch(
-    `${TMDB_BASE_URL}${endpoint}`,
-    {
+  let response;
+
+  try {
+    response = await fetch(`${TMDB_BASE_URL}${endpoint}`, {
       headers: {
         Authorization: `Bearer ${TMDB_TOKEN}`,
         Accept: "application/json",
       },
-    }
-  );
+    });
+  } catch {
+    throw new Error(
+      "Unable to connect to TMDB. Check your internet connection and try again."
+    );
+  }
 
-  const data = await response.json();
+  let data = null;
 
-  console.log(
-    "TMDB RESPONSE:",
-    response.status,
-    data
-  );
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("TMDB returned an invalid response.");
+  }
 
   if (!response.ok) {
     throw new Error(
-      `TMDB_${response.status}: ${
-        data.status_message || "Unknown error"
-      }`
+      data?.status_message ||
+        `TMDB request failed with status ${response.status}.`
     );
   }
 
@@ -48,13 +47,15 @@ async function tmdbRequest(endpoint) {
 }
 
 export async function searchMovies(query) {
-  if (!query.trim()) {
+  const normalizedQuery = query.trim();
+
+  if (!normalizedQuery) {
     return [];
   }
 
   const data = await tmdbRequest(
     `/search/movie?query=${encodeURIComponent(
-      query
+      normalizedQuery
     )}&include_adult=false&language=ru-RU&page=1`
   );
 
@@ -67,10 +68,7 @@ export async function getMovie(id) {
   );
 }
 
-export function getPoster(
-  path,
-  size = "w500"
-) {
+export function getPoster(path, size = "w500") {
   if (!path) {
     return null;
   }
@@ -78,10 +76,7 @@ export function getPoster(
   return `https://image.tmdb.org/t/p/${size}${path}`;
 }
 
-export function getBackdrop(
-  path,
-  size = "original"
-) {
+export function getBackdrop(path, size = "original") {
   if (!path) {
     return null;
   }
