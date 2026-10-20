@@ -5,6 +5,7 @@ const links = [
   { name: "Films", path: "/films" },
   { name: "Watchlist", path: "/watchlist" },
   { name: "Timeline", path: "/timeline" },
+  { name: "Together", path: "/together" },
   { name: "Statistics", path: "/statistics" },
 ];
 
@@ -198,7 +199,7 @@ export default function Navbar({ onAddMovie }) {
       </nav>
 
       {/* MOBILE NAVIGATION */}
-      <div className="cine-mobile-nav flex border-t border-[var(--line)] lg:hidden">
+      <div className="cine-mobile-nav flex overflow-x-auto border-t border-[var(--line)] lg:hidden">
         {links.map((link, index) => {
           const active = isActive(link.path);
 
