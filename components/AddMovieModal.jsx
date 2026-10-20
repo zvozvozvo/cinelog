@@ -14,7 +14,9 @@ import {
 import { getMovie, getPoster, searchMovies } from "../src/tmdb";
 
 function formatRuntime(minutes) {
-  if (!minutes || Number(minutes) <= 0) return "Runtime unknown";
+  if (!minutes || Number(minutes) <= 0) {
+    return "Runtime unknown";
+  }
 
   const value = Number(minutes);
   const h = Math.floor(value / 60);
@@ -29,6 +31,53 @@ function directorOf(movie) {
       (person) => person.job === "Director"
     )?.name || null
   );
+}
+
+function getSearchError(error) {
+  const message = String(error?.message || "");
+
+  if (
+    message.includes("TMDB token is missing") ||
+    message.includes("token")
+  ) {
+    return "TMDB connection is not configured.";
+  }
+
+  if (
+    message.includes("Unable to connect") ||
+    message.includes("Failed to fetch") ||
+    message.includes("NetworkError")
+  ) {
+    return "Unable to connect to TMDB. Check your connection.";
+  }
+
+  if (message.includes("401")) {
+    return "TMDB authorization failed.";
+  }
+
+  if (message.includes("429")) {
+    return "Too many requests. Try again in a moment.";
+  }
+
+  return "Something went wrong while searching. Try again.";
+}
+
+function getDetailsError(error) {
+  const message = String(error?.message || "");
+
+  if (
+    message.includes("Unable to connect") ||
+    message.includes("Failed to fetch") ||
+    message.includes("NetworkError")
+  ) {
+    return "Could not load full movie details. Basic information will be used.";
+  }
+
+  if (message.includes("401")) {
+    return "Could not authorize the TMDB request. Basic information will be used.";
+  }
+
+  return "Could not load full movie details. Basic information will be used.";
 }
 
 export default function AddMovieModal({ onClose, onAdd }) {
@@ -47,6 +96,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
 
     if (!value || selected) {
       setResults([]);
+      setError("");
       return undefined;
     }
 
@@ -56,13 +106,11 @@ export default function AddMovieModal({ onClose, onAdd }) {
 
       try {
         const data = await searchMovies(value);
+
         setResults(data.slice(0, 9));
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
         setResults([]);
-        setError(
-          "TMDB search failed. Check the token or connection."
-        );
+        setError(getSearchError(error));
       } finally {
         setSearching(false);
       }
@@ -89,19 +137,18 @@ export default function AddMovieModal({ onClose, onAdd }) {
     try {
       const details = await getMovie(movie.id);
       setSelected(details);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
       setSelected(movie);
-      setError(
-        "Full movie details could not be loaded. Basic data will still be saved."
-      );
+      setError(getDetailsError(error));
     } finally {
       setLoadingDetails(false);
     }
   }
 
   function addSelected() {
-    if (!selected || loadingDetails) return;
+    if (!selected || loadingDetails) {
+      return;
+    }
 
     onAdd({
       id: selected.id,
@@ -376,6 +423,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                         onClick={() => {
                           setSelected(null);
                           setQuery("");
+                          setError("");
                         }}
                         className="
                           shrink-0
