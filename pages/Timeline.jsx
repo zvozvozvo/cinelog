@@ -54,7 +54,7 @@ function formatDate(movie) {
   }).format(date);
 }
 
-export default function Timeline({ movies }) {
+export default function Timeline({ movies = [] }) {
   const navigate = useNavigate();
 
   const timeline = [...movies].sort((a, b) => {
@@ -93,7 +93,16 @@ export default function Timeline({ movies }) {
         {timeline.length ? (
           <div className="relative border-t border-white/[.13]">
             {timeline.map((movie, index) => {
-              const rating = Number(movie.personalRating);
+              const rating = Number(
+                movie.youRating ??
+                  movie.personalRating ??
+                  0
+              );
+
+              const herRating = Number(
+                movie.herRating ?? 0
+              );
+
               const title = getTitle(movie);
 
               return (
@@ -242,8 +251,7 @@ export default function Timeline({ movies }) {
                             <span className="h-1 w-1 bg-white/15" />
 
                             <span className="cine-mono text-[8px] uppercase tracking-[.12em] text-white/20">
-                              {movie.status ===
-                              "watchlist"
+                              {movie.status === "watchlist"
                                 ? "Watchlist"
                                 : "Watched"}
                             </span>
@@ -258,21 +266,39 @@ export default function Timeline({ movies }) {
                       )}
                     </div>
 
-                    {/* RATING */}
+                    {/* RATINGS */}
 
                     <div className="self-center text-right">
-                      {rating > 0 ? (
-                        <div className="flex items-center justify-end gap-2">
-                          <Star
-                            size={12}
-                            strokeWidth={1.5}
-                            fill="currentColor"
-                            className="text-[var(--acid)]"
-                          />
+                      {rating > 0 || herRating > 0 ? (
+                        <div className="flex flex-col items-end gap-2">
+                          {rating > 0 && (
+                            <div className="flex items-center justify-end gap-2">
+                              <Star
+                                size={12}
+                                strokeWidth={1.5}
+                                fill="currentColor"
+                                className="text-[var(--acid)]"
+                              />
 
-                          <span className="cine-mono text-[10px] text-[var(--acid)]">
-                            {rating.toFixed(1)}
-                          </span>
+                              <span className="cine-mono text-[10px] text-[var(--acid)]">
+                                {rating.toFixed(1)}
+                              </span>
+
+                              <span className="cine-mono text-[7px] uppercase tracking-[.1em] text-white/20">
+                                You
+                              </span>
+                            </div>
+                          )}
+
+                          {herRating > 0 && (
+                            <div className="cine-mono text-[9px] text-white/35">
+                              {herRating.toFixed(1)}
+
+                              <span className="ml-2 text-[7px] uppercase tracking-[.1em] text-white/20">
+                                Her
+                              </span>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <span className="cine-mono text-[8px] uppercase tracking-[.1em] text-white/15">
