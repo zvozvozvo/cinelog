@@ -678,22 +678,22 @@ export default function Statistics({ movies = [] }) {
             <StatBlock
               icon={<Heart size={17} strokeWidth={1.5} />}
               value={`${togetherStats.match.toFixed(0)}%`}
-              label="Taste match"
+              label="Совпадение вкусов"
               detail={`${togetherStats.shared.length} films rated by both`}
             />
 
             <StatBlock
               icon={<Star size={17} strokeWidth={1.5} />}
               value={togetherStats.youAverage.toFixed(1)}
-              label="Your average"
-              detail="Across films rated by both"
+              label="Твоя средняя оценка"
+              detail="По фильмам, которые оценили оба"
             />
 
             <StatBlock
               icon={<Star size={17} strokeWidth={1.5} />}
               value={togetherStats.herAverage.toFixed(1)}
-              label="Her average"
-              detail="Across films rated by both"
+              label="Её средняя оценка"
+              detail="По фильмам, которые оценили оба"
             />
           </div>
         ) : (
