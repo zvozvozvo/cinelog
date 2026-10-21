@@ -10,6 +10,7 @@ import "./cinelog-global.css";
 import "./cinelog-cinema.css";
 import "./cinelog-ultimate.css";
 import "./cinelog-color-compat.css";
+import "./cinelog-streaming-polish.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

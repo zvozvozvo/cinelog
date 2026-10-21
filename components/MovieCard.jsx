@@ -41,12 +41,6 @@ export default function MovieCard({ movie, index = 0 }) {
         />
         <span className="cine-movie-card__status">{status}</span>
         <span className="cine-movie-card__open" aria-hidden="true"><ArrowUpRight size={17} /></span>
-        {hasPersonalRating && (
-          <span className="cine-movie-card__rating" aria-label={`Твоя оценка ${personalRating.toFixed(1)} из 10`}>
-            <Star size={13} fill="currentColor" strokeWidth={1.7} />
-            <strong>{personalRating.toFixed(1)}</strong>
-          </span>
-        )}
       </div>
 
       <div className="cine-movie-card__body">

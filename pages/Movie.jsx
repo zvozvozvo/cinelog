@@ -587,7 +587,7 @@ export default function Movie({
 
                 <div>
                   <p className="cine-mono text-[8px] uppercase tracking-[0.16em] text-white/25">
-                    Твоя оценка
+                    <Star size={11} fill="currentColor" strokeWidth={1.6} className="mr-1 inline-block align-[-1px] text-[var(--cinema-accent)]" /> Твоя оценка
                   </p>
 
                   {currentRating != null ? (

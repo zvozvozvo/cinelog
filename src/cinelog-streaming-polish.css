@@ -1,0 +1,314 @@
+/* CineLog card and control polish.
+   Inspired by kill-ai-slop: fewer decorative layers, one accent, intentional motion. */
+
+:root {
+  --cine-control-duration: 150ms;
+  --cine-control-ease: cubic-bezier(.2, 0, 0, 1);
+}
+
+/* Buttons: a deliberate surface change, not a floating/glowing toy. */
+.cine-button,
+.cine-topbar-add,
+.cine-sidebar__add,
+.home-cinema-add-link,
+.home-cinema-add-inline,
+.home-cinema-text-link,
+.cine-recommendation-mode,
+.cine-recommendations__save,
+.cine-signout-button,
+.cinelog-modal-save {
+  box-shadow: none;
+  filter: none;
+  transition-property: color, background-color, border-color, opacity, box-shadow;
+  transition-duration: var(--cine-control-duration);
+  transition-timing-function: var(--cine-control-ease);
+}
+
+.cine-button,
+.cine-topbar-add,
+.cine-sidebar__add,
+.home-cinema-add-link,
+.home-cinema-add-inline,
+.cine-recommendations__save,
+.cine-signout-button,
+.cinelog-modal-save {
+  border-radius: 7px;
+}
+
+.cine-button--solid,
+.cine-sidebar__add,
+.cinelog-modal-save {
+  border-color: #aab5ff;
+  background: #aab5ff;
+  color: #111522;
+  box-shadow: none;
+  filter: none;
+}
+
+.cine-button--solid:hover,
+.cine-sidebar__add:hover,
+.cinelog-modal-save:hover {
+  transform: none;
+  border-color: #c4cbff;
+  background: #c4cbff;
+  color: #111522;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.16);
+  filter: none;
+}
+
+.cine-button--glass,
+.cine-button:not(.cine-button--solid) {
+  box-shadow: none;
+  filter: none;
+}
+
+.cine-button--glass:hover,
+.cine-button:not(.cine-button--solid):hover {
+  transform: none;
+  border-color: rgba(170,181,255,.46);
+  background-color: rgba(170,181,255,.075);
+  color: #e5e8ff;
+  box-shadow: none;
+  filter: none;
+}
+
+.cine-topbar-add:hover,
+.home-cinema-add-inline:hover,
+.cine-recommendations__save:hover {
+  transform: none;
+  border-color: rgba(170,181,255,.55);
+  background-color: rgba(170,181,255,.08);
+  color: #e2e6ff;
+  box-shadow: none;
+}
+
+.cine-button:active,
+.cine-topbar-add:active,
+.cine-sidebar__add:active,
+.home-cinema-add-link:active,
+.home-cinema-add-inline:active,
+.home-cinema-text-link:active,
+.cine-recommendations__save:active,
+.cine-signout-button:active,
+.cinelog-modal-save:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.cine-button:focus-visible,
+.cine-topbar-add:focus-visible,
+.cine-sidebar__add:focus-visible,
+.home-cinema-add-link:focus-visible,
+.home-cinema-add-inline:focus-visible,
+.home-cinema-text-link:focus-visible,
+.cine-recommendations__save:focus-visible,
+.cine-signout-button:focus-visible,
+.cinelog-modal-save:focus-visible,
+.cine-page button[type="button"]:focus-visible {
+  outline: 2px solid #aab5ff;
+  outline-offset: 3px;
+}
+
+/* The poster is the card. Remove the duplicate personal-score panel from it. */
+.cine-movie-card {
+  min-width: 0;
+  cursor: pointer;
+}
+
+.cine-movie-card__visual {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  border: 1px solid rgba(230,233,245,.13);
+  border-radius: 5px;
+  background: #111622;
+  box-shadow: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.cine-movie-card__visual::after {
+  background: linear-gradient(0deg, rgba(7,10,17,.28), transparent 33%);
+  opacity: .55;
+  transition: opacity 160ms ease;
+}
+
+.cine-movie-card__poster {
+  display: block;
+  transform: none;
+  filter: none;
+  backface-visibility: hidden;
+  transition: filter 160ms ease;
+}
+
+/* Defensive hide for an older card markup during a partial local merge. */
+.cine-movie-card__rating {
+  display: none !important;
+}
+
+.cine-movie-card__status {
+  right: auto;
+  bottom: 8px;
+  left: 8px;
+  max-width: calc(100% - 16px);
+  padding: 5px 7px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 4px;
+  background: rgba(11,15,24,.86);
+  color: #eef0fa;
+  font-size: 9px;
+  line-height: 1.15;
+  backdrop-filter: none;
+}
+
+.cine-movie-card__open {
+  top: 8px;
+  left: 8px;
+  width: 29px;
+  height: 29px;
+  border-radius: 5px;
+  background: rgba(11,15,24,.88);
+  opacity: 0;
+  transform: none;
+  backdrop-filter: none;
+  transition: opacity 150ms ease, border-color 150ms ease;
+}
+
+@media (hover: hover) {
+  .cine-movie-card:hover .cine-movie-card__visual {
+    transform: none;
+    border-color: rgba(170,181,255,.54);
+    box-shadow: 0 3px 10px rgba(0,0,0,.22);
+  }
+
+  .cine-movie-card:hover .cine-movie-card__poster {
+    transform: none;
+    filter: brightness(1.045);
+  }
+
+  .cine-movie-card:hover .cine-movie-card__visual::after {
+    opacity: .72;
+  }
+
+  .cine-movie-card:hover .cine-movie-card__open,
+  .cine-movie-card:focus-visible .cine-movie-card__open {
+    opacity: 1;
+  }
+}
+
+.cine-movie-card__body {
+  min-width: 0;
+  padding: 10px 1px 0;
+}
+
+.cine-movie-card__title-row {
+  min-width: 0;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.cine-movie-card__title {
+  color: #f1f1ed;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.34;
+  letter-spacing: -.02em;
+}
+
+.cine-movie-card__year {
+  color: #9aa2b7;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.cine-movie-card__meta {
+  min-height: 22px;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(230,233,245,.1);
+  color: #9aa2b7;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.cine-movie-card__meta > span:last-child {
+  color: #c9ceff;
+  font-weight: 650;
+}
+
+.cine-movie-card__meta svg {
+  color: #aab5ff;
+}
+
+/* Recommendation controls use the same tactile states without changing their logic. */
+.cine-page button[type="button"] {
+  border-radius: 6px;
+  transition-property: background-color, border-color, color, opacity, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+
+.cine-page button[type="button"][class*="border"]:not(:disabled):hover {
+  border-color: rgba(170,181,255,.42);
+}
+
+.cine-page button[type="button"]:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+.cine-page button[type="button"]:disabled {
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .cine-movie-card__visual {
+    border-radius: 4px;
+    box-shadow: none;
+  }
+
+  .cine-movie-card__status {
+    bottom: 6px;
+    left: 6px;
+    padding: 4px 6px;
+    font-size: 8px;
+  }
+
+  .cine-movie-card__meta {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    font-size: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cine-button,
+  .cine-topbar-add,
+  .cine-sidebar__add,
+  .home-cinema-add-link,
+  .home-cinema-add-inline,
+  .home-cinema-text-link,
+  .cine-movie-card__visual,
+  .cine-movie-card__poster {
+    transition-duration: .01ms !important;
+  }
+}
+
+/* The add-film dialog uses utility classes instead of the shared button component. */
+.fixed.inset-0 button[class*="bg-[#aab5ff]"] {
+  border: 1px solid #aab5ff;
+  border-radius: 7px;
+  filter: none;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.fixed.inset-0 button[class*="bg-[#aab5ff]"]:hover {
+  transform: none;
+  border-color: #c4cbff;
+  background-color: #c4cbff;
+  filter: none;
+}
+
+.fixed.inset-0 button[class*="bg-[#aab5ff]"]:active {
+  transform: translateY(1px);
+}
