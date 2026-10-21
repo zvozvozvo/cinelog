@@ -1,438 +1,823 @@
 <div align="center">
 
-<h1>CineLog</h1>
+CineLog
 
-<p><strong>Личный киноархив · Personal cinema archive</strong></p>
-<p>Смотри. Оценивай. Запоминай.<br><em>Track what you watch. Rate what stays with you. Build your own history of cinema.</em></p>
+Твоя история кино · Your personal cinema archive
 
-<br>
+Сохраняй. Оценивай. Открывай заново.
+Track what you watch. Rate what stays with you. Build your own history of cinema.
 
-<a href="#russian"><img src="https://img.shields.io/badge/ЧИТАТЬ-НА_РУССКОМ-BAF35A?style=for-the-badge&labelColor=10130F" alt="Русская версия"></a>
-<a href="#english"><img src="https://img.shields.io/badge/READ-IN_ENGLISH-EDEBE4?style=for-the-badge&labelColor=10130F" alt="English version"></a>
-<a href="https://github.com/zvozvozvo/cinelog"><img src="https://img.shields.io/badge/GITHUB-ИСХОДНЫЙ_КОД-191D19?style=for-the-badge&logo=github&logoColor=white" alt="Исходный код"></a>
-<a href="https://github.com/zvozvozvo/cinelog/issues"><img src="https://img.shields.io/badge/ОШИБКИ-И_ИДЕИ-191D19?style=for-the-badge&logo=github" alt="Ошибки и идеи"></a>
+<p>
+  <a href="https://cinelog-movie.vercel.app/">
+    <img src="https://img.shields.io/badge/ОТКРЫТЬ_САЙТ-cinelog--movie.vercel.app-B9F45A?style=for-the-badge&logo=vercel&logoColor=111111&labelColor=111111" alt="Открыть CineLog">
+  </a>
+  <a href="https://github.com/zvozvozvo/cinelog">
+    <img src="https://img.shields.io/badge/ИСХОДНЫЙ_КОД-GitHub-EDEBE4?style=for-the-badge&logo=github&logoColor=111111&labelColor=111111" alt="Исходный код на GitHub">
+  </a>
+  <a href="https://github.com/zvozvozvo/cinelog/issues">
+    <img src="https://img.shields.io/badge/ИДЕИ_И_ОШИБКИ-ОБСУДИТЬ-222722?style=for-the-badge&logo=github&logoColor=white&labelColor=111111" alt="Идеи и ошибки">
+  </a>
+</p>
 
-<br><br>
+<p>
+  <img src="https://img.shields.io/badge/React-19-111111?style=flat-square&logo=react&logoColor=61DAFB" alt="React 19">
+  <img src="https://img.shields.io/badge/Vite-8-111111?style=flat-square&logo=vite&logoColor=BD93F9" alt="Vite 8">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-111111?style=flat-square&logo=tailwindcss&logoColor=38BDF8" alt="Tailwind CSS 4">
+  <img src="https://img.shields.io/badge/Supabase-Auth_&_Database-111111?style=flat-square&logo=supabase&logoColor=3ECF8E" alt="Supabase">
+  <img src="https://img.shields.io/badge/TMDB-Movie_API-111111?style=flat-square&logo=themoviedatabase&logoColor=01D277" alt="TMDB API">
+  <img src="https://img.shields.io/badge/License-Not_specified-111111?style=flat-square" alt="License not specified">
+</p>
 
-<img src="https://img.shields.io/badge/React-19-10130F?style=flat-square&logo=react&logoColor=61DAFB" alt="React 19">
-<img src="https://img.shields.io/badge/Vite-8-10130F?style=flat-square&logo=vite&logoColor=BA9BFF" alt="Vite 8">
-<img src="https://img.shields.io/badge/Tailwind_CSS-4-10130F?style=flat-square&logo=tailwindcss&logoColor=38BDF8" alt="Tailwind CSS 4">
-<img src="https://img.shields.io/badge/Supabase-Auth_+_Database-10130F?style=flat-square&logo=supabase&logoColor=3ECF8E" alt="Supabase">
-<img src="https://img.shields.io/badge/TMDB-Movie_API-10130F?style=flat-square&logo=themoviedatabase&logoColor=01D277" alt="TMDB">
+Навигация: Русская версия · English version · Установка · Installation · Возможности · Application flow
 
 </div>
 
----
+────────
 
 <a id="russian"></a>
 
-## 🇷🇺 Русская версия
+🇷🇺 Русская версия
 
-### О CineLog
+Содержание
 
-**CineLog** — личный киноархив для тех, кто хочет не просто выбрать фильм на вечер, а собрать собственную историю кино. Добавляй просмотренные фильмы, ставь оценки, сохраняй фильмы на потом, записывай впечатления и сравнивай вкусы с другим человеком.
+• О проекте
+• Попробовать CineLog
+• Возможности
+• Страницы приложения
+• Дизайн и UX
+• Технологии
+• Как работает приложение
+• Установка и локальный запуск
+• Настройка Supabase
+• Переменные окружения
+• Структура репозитория
+• Безопасность
+• Частые проблемы
+• План развития
+• TMDB и права на материалы
+• Участие в проекте
 
-Визуальный язык проекта вдохновлён киножурналами и архивами: тёмная тема, выразительная типографика, постеры на первом плане и минимум визуального шума.
+<a id="about-ru"></a>
 
-<div align="center">
-<a href="#setup-ru"><img src="https://img.shields.io/badge/НАЧАТЬ-УСТАНОВКУ-BAF35A?style=for-the-badge&labelColor=10130F" alt="Начать установку"></a>
-<a href="#features-ru"><img src="https://img.shields.io/badge/ВОЗМОЖНОСТИ-ПРОЕКТА-EDEBE4?style=for-the-badge&labelColor=10130F" alt="Возможности"></a>
-<a href="https://github.com/zvozvozvo/cinelog/issues"><img src="https://img.shields.io/badge/ПРЕДЛОЖИТЬ-ИДЕЮ-191D19?style=for-the-badge&labelColor=10130F" alt="Предложить идею"></a>
-</div>
+О проекте
 
-### Возможности
+CineLog — личный киноархив и дневник просмотров. Это место, где можно собирать фильмы в собственную коллекцию, отмечать просмотренное, выставлять личные оценки, сохранять фильмы на потом и постепенно формировать историю своего кинематографического вкуса.
+
+Вместо бесконечного выбора «что посмотреть вечером» CineLog помогает сохранять то, что ты уже посмотрел, помнить впечатления и возвращаться к фильмам, которые заслуживают повторного просмотра. В приложении также предусмотрены профиль пользователя, статистика, рекомендации и раздел для сравнения вкусов с другим человеком.
+
+Проект разрабатывается как веб-приложение с адаптивным интерфейсом. Визуальное направление опирается на эстетику киножурнала и аккуратного цифрового архива: почти чёрный фон, молочная типографика, лаймовый акцент, заметные постеры и сдержанные элементы управления.
+
+<a id="live-ru"></a>
+
+Попробовать CineLog
+
+• Открыть сайт — опубликованная версия приложения.
+• Исходный код на GitHub — компоненты, страницы, SQL-скрипты и конфигурация.
+• Сообщить об ошибке или предложить функцию — идеи и баг-репорты.
+
+> Для локального запуска и полноценного использования функций аккаунта нужны собственные настройки TMDB и Supabase. Доступность опубликованного сайта также может зависеть от сети и региона.
 
 <a id="features-ru"></a>
 
-| Раздел | Описание |
-| --- | --- |
-| **Личный киноархив** | Поиск фильмов в TMDB, каталог и карточки с метаданными |
-| **Оценки** | Личный рейтинг просмотренного фильма от 0 до 10 |
-| **К просмотру** | Отдельный список фильмов на потом |
-| **Карточка фильма** | Постер, фон, описание, жанры, дата выхода, длительность и режиссёр |
-| **История** | Хронология записей в архиве |
-| **Статистика** | Средняя оценка, распределение рейтингов, жанры, годы выхода и длительность |
-| **Дневник просмотров** | Дата просмотра или пересмотра, отдельная оценка и заметка |
-| **Рекомендации** | Подбор фильмов с учётом оценок и жанров; режим для двоих |
-| **Вместе** | Приглашение второго аккаунта и сравнение оценок общих фильмов |
-| **Профиль** | Имя, аватар по ссылке, описание, любимые жанры и личные показатели |
+Возможности
 
-### Страницы приложения
+|Возможность             |Что она даёт                                                                                                      |
+|------------------------|------------------------------------------------------------------------------------------------------------------|
+|**Личный киноархив**    |Собирай фильмы в едином каталоге и управляй их статусами.                                                         |
+|**Поиск через TMDB**    |Находи фильмы по названию и получай метаданные из The Movie Database.                                             |
+|**Оценки**              |Ставь личную оценку просмотренному фильму. Пользовательская оценка отделена от рейтинга TMDB.                     |
+|**Список «К просмотру»**|Сохраняй фильмы, которые хочешь посмотреть позже.                                                                 |
+|**Карточка фильма**     |Просматривай описание, год выхода, жанры, длительность, режиссёра, постер и фон, когда эти данные доступны у TMDB.|
+|**История / Timeline**  |Просматривай свою киноисторию в хронологическом формате.                                                          |
+|**Статистика**          |Изучай собственные показатели, оценки, жанры и распределение просмотров.                                          |
+|**Дневник просмотров**  |Фиксируй дату просмотра или пересмотра, оценку и личную заметку.                                                  |
+|**Рекомендации**        |Открывай новые фильмы на основе данных TMDB и вкусовых предпочтений.                                              |
+|**Раздел «Вместе»**     |Используй совместные функции и сравнение оценок после настройки подключения с другим пользователем.               |
+|**Профиль**             |Настраивай отображаемое имя, аватар, описание и любимые жанры.                                                    |
+|**Адаптивный интерфейс**|Пользуйся приложением на широком экране и мобильном устройстве.                                                   |
 
-| Маршрут | Назначение |
-| --- | --- |
-| <code>/</code> | Главная |
-| <code>/auth</code> | Вход и регистрация |
-| <code>/films</code> | Полный киноархив |
-| <code>/watchlist</code> | Список «К просмотру» |
-| <code>/timeline</code> | История |
-| <code>/statistics</code> | Статистика |
-| <code>/movie/:id</code> | Карточка фильма и дневник просмотров |
-| <code>/recommendations</code> | Персональные и совместные рекомендации |
-| <code>/together</code> | Приглашения и сравнение оценок |
-| <code>/profile</code> | Профиль пользователя |
+> Часть пользовательских возможностей зависит от корректной настройки базы Supabase, схемы таблиц и политик доступа. README описывает структуру текущего проекта, но не заменяет проверку конфигурации конкретного развёртывания.
 
-### Технологии
+<a id="routes-ru"></a>
 
-- **React 19** — компоненты интерфейса.
-- **Vite 8** — разработка и production-сборка.
-- **Tailwind CSS 4** — стили и адаптивная вёрстка.
-- **React Router 7** — маршрутизация.
-- **Supabase** — авторизация, база данных и политики доступа.
-- **TMDB API** — поиск фильмов, метаданные, постеры и фоны.
-- **Motion** — анимации.
-- **Lucide React** — иконки.
+Страницы приложения
 
-### Как хранятся данные
+|Маршрут                                 |Назначение                                    |
+|----------------------------------------|----------------------------------------------|
+|[`/`](https://cinelog-movie.vercel.app/)|Главная страница                              |
+|`/auth`                                 |Вход и регистрация                            |
+|`/films`                                |Киноархив                                     |
+|`/watchlist`                            |Список «К просмотру»                          |
+|`/timeline`                             |Хронология киноистории                        |
+|`/statistics`                           |Статистика просмотров и оценок                |
+|`/movie/:id`                            |Подробная страница фильма и дневник просмотров|
+|`/recommendations`                      |Рекомендации                                  |
+|`/together`                             |Совместный раздел и сравнение вкусов          |
+|`/profile`                              |Профиль пользователя                          |
 
-| Таблица Supabase | Назначение |
-| --- | --- |
-| <code>movies</code> | Общие метаданные фильмов |
-| <code>user_movies</code> | Статус фильма и отдельная личная оценка каждого пользователя |
-| <code>profiles</code> | Имя, аватар, описание и любимые жанры |
-| <code>connections</code> | Приглашения и подключения пользователей |
-| <code>movie_journal</code> | Личные записи о просмотрах и пересмотрах |
+<a id="design-ru"></a>
 
-Оценки разных пользователей хранятся отдельно. Политики Row Level Security (RLS) должны ограничивать доступ к личным записям владельцем; общая запись фильма не является чьей-либо оценкой.
+Дизайн и UX
+
+CineLog придерживается редакционного подхода к интерфейсу: визуальная иерархия строится вокруг фильмов, постеров и личных записей, а не вокруг декоративных панелей.
+
+• Палитра: чёрный и графитовый фон, молочный текст, лаймовый цвет для важных акцентов.
+• Постеры на первом плане: визуальный образ фильма помогает быстрее ориентироваться в архиве.
+• Типографика: крупные заголовки сочетаются с компактными подписями и метаданными.
+• Сдержанные разделители: тонкие линии структурируют страницы, не превращая их в сетку из тяжёлых карточек.
+• Мобильная адаптация: секции, карточки и навигация должны оставаться читаемыми на небольших экранах.
+• Постепенное развитие визуального стиля: концепт фирменного знака CineLog — монограмма CL в рамке кадра с лаймовым акцентом. Детали дизайна могут меняться по мере развития интерфейса.
+
+<a id="stack-ru"></a>
+
+Технологический стек
+
+|Технология        |Роль в проекте                                |Ссылка                                                   |
+|------------------|----------------------------------------------|---------------------------------------------------------|
+|**React 19**      |Компоненты и состояние интерфейса             |[Документация](https://react.dev/)                       |
+|**Vite 8**        |Dev-сервер и production-сборка                |[Документация](https://vite.dev/)                        |
+|**Tailwind CSS 4**|Утилитарные стили                             |[Документация](https://tailwindcss.com/)                 |
+|**React Router 7**|Маршрутизация между страницами                |[Документация](https://reactrouter.com/)                 |
+|**Supabase**      |Авторизация и хранение пользовательских данных|[Документация](https://supabase.com/docs)                |
+|**TMDB API**      |Поиск фильмов, метаданные, постеры и фоны     |[Документация API](https://developer.themoviedb.org/docs)|
+|**Motion**        |Анимации интерфейса                           |[Документация](https://motion.dev/)                      |
+|**Lucide React**  |Иконки интерфейса                             |[Каталог и документация](https://lucide.dev/)            |
+
+<a id="flow-ru"></a>
+
+Как работает приложение
+
+flowchart TD
+    A[Пользователь в браузере] --> B[React UI]
+    B --> C[Страницы и компоненты]
+    C --> D[TMDB API]
+    C --> E[Supabase Auth]
+    E --> F[Supabase Database]
+    D --> G[Поиск и метаданные фильмов]
+    F --> H[Личный архив и записи пользователя]
+    G --> C
+    H --> C
+
+• TMDB предоставляет каталог, описания и пути к изображениям. CineLog строит интерфейс вокруг этих данных.
+• Supabase Auth отвечает за сессию и вход пользователя.
+• Supabase Database хранит личные статусы, оценки, профиль и записи дневника в соответствии с настроенной схемой.
+• React соединяет эти данные с UI, а React Router управляет переходами между разделами.
 
 <a id="setup-ru"></a>
 
-### Установка и запуск
+Установка и локальный запуск
 
-**1. Склонируй репозиторий**
+Требования
 
-~~~bash
+• Node.js и npm в версиях, совместимых с Vite 8.
+• Git.
+• Проект в Supabase для авторизации и данных.
+• Учётная запись и API Read Access Token в TMDB.
+
+1. Клонировать репозиторий
+
 git clone https://github.com/zvozvozvo/cinelog.git
 cd cinelog
-~~~
 
-**2. Установи зависимости**
+2. Установить зависимости
 
-~~~bash
 npm install
-~~~
 
-**3. Создай файл окружения**
+3. Настроить переменные окружения
 
-В корне проекта создай <code>.env</code>:
+Создай файл .env в корне проекта:
 
-~~~env
 VITE_TMDB_TOKEN=YOUR_TMDB_READ_ACCESS_TOKEN
 VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY
-~~~
 
-Замени примеры своими значениями. Не загружай настоящий файл окружения в GitHub.
+Замени все примеры своими значениями. Подробнее — в разделе «Переменные окружения».
 
-**4. Подготовь Supabase**
+4. Подготовить Supabase
 
-Приложение ожидает таблицы <code>movies</code>, <code>user_movies</code>, <code>profiles</code> и <code>connections</code> с настроенными политиками RLS. SQL-файлы в <code>sql/</code> расширяют существующую схему:
+Приложение ожидает базовую схему с таблицами movies, user_movies, profiles и connections. SQL-файлы в sql/ добавляют отдельные части схемы, но не создают всю базу с нуля:
 
-- <code>add_profile_fields.sql</code> — поля профиля и политика создания собственного профиля.
-- <code>create_movie_journal.sql</code> — таблица дневника просмотров и политики доступа.
+• sql/add_profile_fields.sql — дополнительные поля профиля и политика доступа.
+• sql/create_movie_journal.sql — дневник просмотров и политики доступа.
 
-Открой **Supabase → SQL Editor**, проверь нужный скрипт и выполни его один раз. Эти миграции не создают всю базу с нуля.
+Открой Supabase → SQL Editor, изучи соответствующий скрипт и выполни его один раз для своей базы. Перед запуском SQL в существующем проекте проверь, какие таблицы и политики уже созданы.
 
-В **Authentication → URL Configuration** разреши локальный адрес, обычно <code>http://localhost:5173/**</code>. Если Vite использует другой порт, укажи адрес из терминала.
+5. Запустить локально
 
-**5. Запусти приложение**
-
-~~~bash
 npm run dev
-~~~
 
-Сборка и предпросмотр production-версии:
+Vite выведет локальный адрес в терминале, обычно http://localhost:5173.
 
-~~~bash
+6. Собрать production-версию
+
 npm run build
 npm run preview
-~~~
 
-Проверка линтером:
+Проверить проект линтером:
 
-~~~bash
 npm run lint
-~~~
 
-### Переменные окружения и безопасность
+<a id="supabase-ru"></a>
 
-| Переменная | Назначение |
-| --- | --- |
-| <code>VITE_TMDB_TOKEN</code> | TMDB API Read Access Token |
-| <code>VITE_SUPABASE_URL</code> | URL проекта Supabase |
-| <code>VITE_SUPABASE_ANON_KEY</code> | Публичный publishable/anon-ключ Supabase |
+Настройка Supabase
 
-> [!WARNING]
-> **Никогда не коммить настоящий файл <code>.env</code>.** Значения с префиксом <code>VITE_</code> включаются в браузерную сборку и не должны содержать серверные секреты. Не используй Supabase <code>service_role</code> или Secret Key в клиентском приложении. Для защиты личных данных настрой корректные политики RLS.
+1. Создай проект в Supabase Dashboard.
+2. В настройках проекта скопируй Project URL и публичный publishable/anon key.
+3. Добавь значения в локальный .env и в Environment Variables проекта Vercel.
+4. Убедись, что существующая схема БД содержит необходимые таблицы и связи, используемые кодом.
+5. Настрой политики Row Level Security (RLS) так, чтобы личные данные и оценки были доступны только их владельцу, а доступ к совместным функциям был явно разрешён ожидаемым участникам.
+6. В Authentication → URL Configuration добавь адреса редиректа.
 
-### Структура проекта
+Пример адресов для локальной разработки и текущего развёртывания:
 
-~~~text
+http://localhost:5173/**
+https://cinelog-movie.vercel.app/**
+
+В качестве Site URL для production используй https://cinelog-movie.vercel.app, если именно этот адрес является основным для твоего развёртывания. Если домен меняется, обнови его и в Supabase.
+
+Документация: Supabase Auth Redirect URLs.
+
+<a id="env-ru"></a>
+
+Переменные окружения
+
+|Переменная              |Обязательна|Назначение                                            |
+|------------------------|:---------:|------------------------------------------------------|
+|`VITE_TMDB_TOKEN`       |Да         |TMDB API Read Access Token для запросов к API фильмов.|
+|`VITE_SUPABASE_URL`     |Да         |URL проекта Supabase.                                 |
+|`VITE_SUPABASE_ANON_KEY`|Да         |Публичный ключ клиента Supabase (publishable/anon).   |
+
+Где получить значения
+
+• TMDB: зарегистрируйся и получи API Read Access Token в настройках API. Не вставляй сюда пароль от аккаунта TMDB.
+• Supabase URL и ключ: найди в настройках своего проекта в разделе API / Project settings.
+
+Важно для Vercel
+
+После добавления или изменения переменных в Vercel нужно запустить новое развёртывание, чтобы значения попали в сборку. Проверь, что переменные заданы для нужных сред — обычно Production, а при необходимости также Preview и Development.
+
+<a id="structure-ru"></a>
+
+Структура репозитория
+
 cinelog/
-├── components/           # Общие компоненты
-│   ├── AddMovieModal.jsx
-│   ├── MovieCard.jsx
-│   ├── MovieJournal.jsx
-│   └── Navbar.jsx
-├── pages/                # Страницы приложения
-│   ├── Auth.jsx
-│   ├── Films.jsx
-│   ├── Home.jsx
-│   ├── Movie.jsx
-│   ├── Profile.jsx
-│   ├── Recommendations.jsx
-│   ├── Statistics.jsx
-│   ├── Timeline.jsx
-│   ├── Together.jsx
-│   └── Watchlist.jsx
-├── sql/                  # SQL-миграции Supabase
+├── components/                 # Повторно используемые UI-компоненты
+│   ├── AddMovieModal.jsx       # Модальное окно добавления фильма
+│   ├── MovieCard.jsx           # Карточка фильма
+│   ├── MovieJournal.jsx        # Дневник просмотров
+│   ├── Navbar.jsx              # Навигация
+│   └── Stat.jsx                # Компонент показателя статистики
+├── pages/                      # Страницы приложения
+│   ├── Auth.jsx                # Вход и регистрация
+│   ├── Home.jsx                # Главная
+│   ├── Films.jsx                # Каталог
+│   ├── Watchlist.jsx            # Список «К просмотру»
+│   ├── Movie.jsx                # Страница фильма
+│   ├── Timeline.jsx             # Хронология
+│   ├── Statistics.jsx           # Статистика
+│   ├── Recommendations.jsx      # Рекомендации
+│   ├── Together.jsx              # Совместный раздел
+│   └── Profile.jsx               # Профиль
+├── public/                      # Публичные статические ресурсы
+├── sql/                         # SQL-скрипты/миграции Supabase
 ├── src/
-│   ├── App.jsx
-│   ├── supabaseMovies.js
-│   └── tmdb.js
-├── supabase.js
-├── index.html
-├── package.json
-└── README.md
-~~~
+│   ├── App.jsx                  # Основная логика маршрутов и состояния
+│   ├── main.jsx                 # Точка входа React
+│   ├── tmdb.js                  # Запросы к TMDB API
+│   ├── supabaseMovies.js        # Работа с данными архива
+│   ├── storage.js               # Вспомогательная работа с хранилищем
+│   ├── index.css                # Базовые стили и дизайн-токены
+│   └── App.css                  # Стили компонентов и страниц
+├── supabase.js                  # Создание Supabase-клиента
+├── index.html                   # HTML-шаблон
+├── vite.config.js               # Конфигурация Vite
+├── package.json                 # Скрипты и зависимости
+├── package-lock.json            # Зафиксированные версии npm-пакетов
+└── README.md                    # Документация проекта
 
-### Принципы проекта
+<a id="security-ru"></a>
 
-- **Сначала фильм.** Постер и название важнее декора.
-- **Личные оценки остаются личными.** У каждого пользователя собственный рейтинг.
-- **Метаданные отделены от пользовательских данных.** Один фильм может быть в архивах нескольких людей.
-- **Только реальные показатели.** Статистика строится на существующих записях.
-- **Минимум визуального шума.** Типографика и анимация поддерживают содержание.
+Безопасность и приватность
 
-### Дальнейшие планы
+> [!CAUTION]
+> **Не добавляй настоящий `.env` в GitHub. Не публикуй административные ключи.** Любая переменная с префиксом `VITE_` доступна клиентскому JavaScript после сборки.
 
-- [x] Поиск TMDB и карточки фильмов
-- [x] Личный архив, список просмотра и оценки
-- [x] История и статистика
-- [x] Авторизация и пользовательские записи в Supabase
-- [x] Профиль и любимые жанры
-- [x] Совместный раздел и сравнение оценок
-- [x] Рекомендации
-- [x] Дневник просмотров и пересмотров
-- [ ] Импорт и экспорт архива
-- [ ] Пользовательские списки
-- [ ] Годовые итоги на основе реальных данных
+• Никогда не помещай Supabase service_role или Secret Key во фронтенд.
+• Для VITE_SUPABASE_ANON_KEY используй только публичный ключ, предназначенный для клиента.
+• Считай TMDB token клиентским значением в этой архитектуре: он используется браузером и не должен рассматриваться как скрытый серверный секрет.
+• Включи и проверь RLS для таблиц с личными записями. Сам факт использования Supabase не защищает таблицы автоматически.
+• Не коммить пользовательские данные, токены, ключи или локальные файлы окружения.
+• Если значение ключа случайно попало в публичный репозиторий, отзови или перевыпусти его у провайдера.
 
-### Атрибуция TMDB
+<a id="faq-ru"></a>
 
-CineLog использует TMDB API для поиска фильмов, метаданных, постеров и фонов. **CineLog не одобрен и не сертифицирован TMDB.** Данные и изображения принадлежат соответствующим правообладателям.
+Частые проблемы
 
----
+<details>
+<summary><strong>Сайт открылся пустым экраном</strong></summary>
+
+1. Открой DevTools → Console и посмотри первую красную ошибку.
+2. Проверь Network: загружаются ли JavaScript-файлы, CSS и запросы к API.
+3. Убедись, что Vercel завершил deployment со статусом Ready.
+4. Проверь vite.config.js: для публикации в корне домена обычно нужен base: '/'.
+5. После исправления конфигурации сделай новую сборку и жёсткую перезагрузку страницы.
+
+</details>
+
+<details>
+<summary><strong>Поиск фильмов не работает</strong></summary>
+
+• Проверь VITE_TMDB_TOKEN в локальном .env или настройках Vercel.
+• После изменения .env перезапусти Vite; после изменения переменных в Vercel запусти новый deployment.
+• Проверь запросы в DevTools → Network и ответы TMDB. Не публикуй токен в скриншотах или логах.
+
+</details>
+
+<details>
+<summary><strong>Вход, регистрация или редиректы не работают</strong></summary>
+
+• Проверь VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY.
+• Проверь Authentication → URL Configuration в Supabase.
+• Убедись, что текущий домен разрешён в Redirect URLs.
+• Проверь логи браузера и настройки подтверждения электронной почты в Supabase Auth.
+
+</details>
+
+<details>
+<summary><strong>Постеры или изображения не отображаются</strong></summary>
+
+• Проверь poster_path / backdrop_path в ответе TMDB.
+• Убедись, что запросы к image.tmdb.org не блокируются сетью или расширениями браузера.
+• Если у фильма действительно нет постера, интерфейс должен показывать аккуратную заглушку, а не ломать карточку.
+
+</details>
+
+<details>
+<summary><strong>Можно ли смотреть фильмы прямо на CineLog?</strong></summary>
+
+Нет. CineLog — каталог, личный архив и дневник просмотров. Он не размещает и не транслирует фильмы.
+
+</details>
+
+<a id="roadmap-ru"></a>
+
+План развития
+
+Уже реализовано в проекте
+
+☑ Поиск и метаданные фильмов через TMDB
+☑ Личный архив и статусы фильмов
+☑ Личные оценки и список «К просмотру»
+☑ Карточки фильмов
+☑ Авторизация через Supabase
+☑ Профиль пользователя
+☑ История и статистика
+☑ Рекомендации
+☑ Совместный раздел
+☑ Дневник просмотров и пересмотров
+
+Возможные следующие улучшения
+
+☐ Импорт и экспорт личного архива
+☐ Пользовательские коллекции и списки
+☐ Итоги года на основе реальных данных пользователя
+☐ Улучшение мобильной навигации и состояний загрузки
+☐ Дополнительная обработка отсутствующих постеров и ошибок API
+☐ Расширенная доступность: клавиатурная навигация, контраст и доступные подписи
+
+План может меняться по мере тестирования и развития проекта. Отметка в списке функций не заменяет проверку конкретного deployment.
+
+<a id="credits-ru"></a>
+
+TMDB и права на материалы
+
+CineLog использует TMDB API для поиска фильмов и получения метаданных, включая изображения, где они доступны. CineLog — независимый проект и не одобрен и не сертифицирован TMDB.
+
+TMDB: сайт · документация API · настройки API.
+
+Названия фильмов, постеры, фоны и связанные данные принадлежат соответствующим правообладателям и предоставляются согласно условиям источника.
+
+<a id="contributing-ru"></a>
+
+Участие в проекте
+
+Нашёл ошибку или есть идея? Создай Issue в GitHub и опиши:
+
+1. Что ты ожидал увидеть.
+2. Что произошло на самом деле.
+3. Шаги для повторения проблемы.
+4. Браузер и устройство, если проблема связана с интерфейсом.
+5. Скриншот ошибки, скрыв личные данные и ключи.
+
+Если хочешь предложить код, создай fork и pull request с кратким описанием изменений. Перед крупным изменением интерфейса полезно сначала обсудить идею в Issue.
+
+Лицензия
+
+На момент написания README в репозитории не указан файл LICENSE. Пока лицензия не добавлена, не следует считать код свободно лицензированным для произвольного повторного использования. Если планируется открытое использование проекта, сначала нужно выбрать и добавить лицензию.
+
+────────
 
 <a id="english"></a>
 
-## 🇬🇧 English version
+🇬🇧 English version
 
-### About
+Table of contents
 
-**CineLog** is a personal cinema archive for people who want more than a quick answer to “What should I watch tonight?”. Add watched films, rate them, keep a watchlist, record impressions and compare your taste with another person.
+• About the project
+• Live demo and source
+• Features
+• Application routes
+• Design direction
+• Technology stack
+• Application flow
+• Local installation
+• Supabase setup
+• Environment variables
+• Repository structure
+• Security and privacy
+• FAQ and troubleshooting
+• Roadmap
+• TMDB attribution
+• Contributing
 
-The visual direction takes inspiration from editorial film journals and curated archives: a dark canvas, expressive typography, poster-first layouts and restrained interface details.
+<a id="about-en"></a>
 
-<div align="center">
-<a href="#setup-en"><img src="https://img.shields.io/badge/GET_STARTED-INSTALLATION-BAF35A?style=for-the-badge&labelColor=10130F" alt="Get started"></a>
-<a href="#features-en"><img src="https://img.shields.io/badge/EXPLORE-FEATURES-EDEBE4?style=for-the-badge&labelColor=10130F" alt="Explore features"></a>
-<a href="https://github.com/zvozvozvo/cinelog"><img src="https://img.shields.io/badge/SOURCE-ON_GITHUB-191D19?style=for-the-badge&logo=github&logoColor=white" alt="Source on GitHub"></a>
-</div>
+About the project
 
-### Features
+CineLog is a personal movie archive and viewing journal. It helps you build a collection of films, mark what you have watched, add your own ratings, save titles for later and gradually create a record of your cinematic taste.
+
+Instead of repeatedly asking “What should I watch tonight?”, CineLog gives you a place to remember what you watched, keep notes and return to films worth revisiting. The application also includes a user profile, viewing statistics, recommendations and a shared area for comparing taste with another person.
+
+CineLog is a web application built with an adaptive interface. Its visual direction takes inspiration from editorial film journals and curated digital archives: near-black backgrounds, warm ivory typography, a vivid lime accent, prominent movie artwork and restrained UI controls.
+
+<a id="live-en"></a>
+
+Live demo and source code
+
+• Open CineLog — the currently published application.
+• Source code on GitHub — pages, components, SQL scripts and configuration.
+• Report a bug or suggest a feature — issues and ideas.
+
+> Running the project locally and using account-based features requires your own TMDB and Supabase configuration. Reachability of the hosted site may depend on network conditions and region.
 
 <a id="features-en"></a>
 
-| Area | Description |
-| --- | --- |
-| **Personal library** | Search TMDB, add films and maintain an archive |
-| **Ratings** | Give each watched film a personal score from 0 to 10 |
-| **Watchlist** | Save titles for later |
-| **Movie details** | Posters, backdrops, overview, genres, release date, runtime and director |
-| **Timeline** | Browse archive entries chronologically |
-| **Statistics** | Rating distribution, genres, release years and runtime |
-| **Viewing journal** | Record a watch or rewatch with a date, rating and personal note |
-| **Recommendations** | Discover films using ratings, genre preferences and TMDB |
-| **Together** | Invite another registered user and compare ratings |
-| **Profile** | Manage display name, avatar URL, bio, favorite genres and personal statistics |
+Features
 
-### Application routes
+|Feature                   |Description                                                                                            |
+|--------------------------|-------------------------------------------------------------------------------------------------------|
+|**Personal movie library**|Keep films in one catalogue and manage their statuses.                                                 |
+|**TMDB search**           |Search movie titles and retrieve metadata from The Movie Database.                                     |
+|**Personal ratings**      |Rate watched films independently of their public TMDB rating.                                          |
+|**Watchlist**             |Save films you plan to watch later.                                                                    |
+|**Movie details**         |Browse overview, release year, genres, runtime, director, poster and backdrop when available from TMDB.|
+|**Timeline**              |Explore your cinema history chronologically.                                                           |
+|**Statistics**            |Review personal metrics, ratings, genres and viewing patterns.                                         |
+|**Viewing journal**       |Record a watch or rewatch with a date, rating and personal note.                                       |
+|**Recommendations**       |Discover films using TMDB data and taste-related preferences.                                          |
+|**Together**              |Use shared features and compare ratings after another user connection is configured.                   |
+|**Profile**               |Manage display name, avatar, bio and favorite genres.                                                  |
+|**Responsive UI**         |Use the interface on desktop and mobile devices.                                                       |
 
-| Route | Purpose |
-| --- | --- |
-| <code>/</code> | Home |
-| <code>/auth</code> | Sign in and registration |
-| <code>/films</code> | Film archive |
-| <code>/watchlist</code> | Watchlist |
-| <code>/timeline</code> | Timeline |
-| <code>/statistics</code> | Personal statistics |
-| <code>/movie/:id</code> | Movie details and viewing journal |
-| <code>/recommendations</code> | Personal and shared recommendations |
-| <code>/together</code> | Invitations and rating comparison |
-| <code>/profile</code> | User profile |
+> Some user features depend on a correctly configured Supabase database schema and access policies. This README documents the current codebase; it does not guarantee that every deployment has identical configuration.
 
-### Technology stack
+<a id="routes-en"></a>
 
-- **React 19** — UI components.
-- **Vite 8** — development and production builds.
-- **Tailwind CSS 4** — styling and responsive layouts.
-- **React Router 7** — routing.
-- **Supabase** — authentication, database and access policies.
-- **TMDB API** — movie search, metadata, posters and backdrops.
-- **Motion** — animations.
-- **Lucide React** — icons.
+Application routes
 
-### Data model
+|Route                                   |Purpose                          |
+|----------------------------------------|---------------------------------|
+|[`/`](https://cinelog-movie.vercel.app/)|Home                             |
+|`/auth`                                 |Sign in and registration         |
+|`/films`                                |Movie library                    |
+|`/watchlist`                            |Watchlist                        |
+|`/timeline`                             |Viewing timeline                 |
+|`/statistics`                           |Viewing and rating statistics    |
+|`/movie/:id`                            |Movie details and viewing journal|
+|`/recommendations`                      |Recommendations                  |
+|`/together`                             |Shared area and taste comparison |
+|`/profile`                              |User profile                     |
 
-| Supabase table | Purpose |
-| --- | --- |
-| <code>movies</code> | Shared movie metadata |
-| <code>user_movies</code> | Per-user status and personal rating |
-| <code>profiles</code> | Display name, avatar, bio and favorite genres |
-| <code>connections</code> | User invitations and connections |
-| <code>movie_journal</code> | Personal watch and rewatch entries |
+<a id="design-en"></a>
 
-Ratings are stored per user. Row Level Security (RLS) should restrict personal records to their owner; shared movie metadata is not a personal rating.
+Design direction
+
+CineLog follows an editorial approach to interface design: films, posters and personal records are the focus, while decoration stays quiet.
+
+• Palette: black and charcoal surfaces, warm ivory text and a vivid lime accent.
+• Artwork first: posters provide a fast visual way to browse the archive.
+• Typography: expressive headings paired with compact labels and metadata.
+• Fine dividers: thin lines organise content without overwhelming it with heavy cards.
+• Responsive layouts: sections, cards and navigation should remain readable on narrow screens.
+• Evolving identity: the CineLog logo concept is a CL monogram inside a viewfinder-like frame with a lime accent. Design details may evolve as the interface develops.
+
+<a id="stack-en"></a>
+
+Technology stack
+
+|Technology        |Role                                   |Link                                                      |
+|------------------|---------------------------------------|----------------------------------------------------------|
+|**React 19**      |UI components and state                |[Documentation](https://react.dev/)                       |
+|**Vite 8**        |Dev server and production builds       |[Documentation](https://vite.dev/)                        |
+|**Tailwind CSS 4**|Utility-first styling                  |[Documentation](https://tailwindcss.com/)                 |
+|**React Router 7**|Client-side routing                    |[Documentation](https://reactrouter.com/)                 |
+|**Supabase**      |Authentication and user data           |[Documentation](https://supabase.com/docs)                |
+|**TMDB API**      |Search, metadata, posters and backdrops|[API documentation](https://developer.themoviedb.org/docs)|
+|**Motion**        |UI animation                           |[Documentation](https://motion.dev/)                      |
+|**Lucide React**  |UI icons                               |[Icons and documentation](https://lucide.dev/)            |
+
+<a id="flow-en"></a>
+
+Application flow
+
+flowchart TD
+    A[Browser user] --> B[React UI]
+    B --> C[Pages and components]
+    C --> D[TMDB API]
+    C --> E[Supabase Auth]
+    E --> F[Supabase Database]
+    D --> G[Movie search and metadata]
+    F --> H[Personal library and user records]
+    G --> C
+    H --> C
+
+• TMDB provides the movie catalogue, descriptions and image paths.
+• Supabase Auth manages sessions and sign-in.
+• Supabase Database stores personal statuses, ratings, profiles and journal entries according to the configured schema.
+• React connects this data to the UI, while React Router handles navigation between sections.
 
 <a id="setup-en"></a>
 
-### Installation
+Local installation
 
-**1. Clone the repository**
+Requirements
 
-~~~bash
+• Node.js and npm versions compatible with Vite 8.
+• Git.
+• A Supabase project for authentication and data.
+• A TMDB account and API Read Access Token from TMDB API settings.
+
+1. Clone the repository
+
 git clone https://github.com/zvozvozvo/cinelog.git
 cd cinelog
-~~~
 
-**2. Install dependencies**
+2. Install dependencies
 
-~~~bash
 npm install
-~~~
 
-**3. Configure environment variables**
+3. Configure environment variables
 
-Create a <code>.env</code> file in the project root:
+Create a .env file in the project root:
 
-~~~env
 VITE_TMDB_TOKEN=YOUR_TMDB_READ_ACCESS_TOKEN
 VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY
-~~~
 
-Replace the placeholders with your own values. Never commit the real environment file.
+Replace the placeholders with your own values. See Environment variables.
 
-**4. Configure Supabase**
+4. Prepare Supabase
 
-The app expects the <code>movies</code>, <code>user_movies</code>, <code>profiles</code> and <code>connections</code> tables with RLS policies configured. The SQL files in <code>sql/</code> extend the existing schema:
+The app expects a base schema with movies, user_movies, profiles and connections tables. SQL files in sql/ add specific schema features but do not create the entire database from scratch:
 
-- <code>add_profile_fields.sql</code> — profile fields and a policy for creating one's own profile.
-- <code>create_movie_journal.sql</code> — the viewing-journal table and access policies.
+• sql/add_profile_fields.sql — additional profile fields and an access policy.
+• sql/create_movie_journal.sql — viewing journal and access policies.
 
-Open **Supabase → SQL Editor**, review the relevant migration and run it once. These migrations do not create the entire database from scratch.
+Open Supabase → SQL Editor, review the relevant script and run it once for your database. Before executing SQL against an existing project, check which tables and policies are already present.
 
-In **Authentication → URL Configuration**, allow your local redirect URL, usually <code>http://localhost:5173/**</code>. Use the actual URL if Vite chooses a different port.
+5. Start the development server
 
-**5. Start the app**
-
-~~~bash
 npm run dev
-~~~
 
-Build and preview the production version:
+Vite prints a local URL in the terminal, usually http://localhost:5173.
 
-~~~bash
+6. Build and preview production
+
 npm run build
 npm run preview
-~~~
 
-Run the linter:
+Run ESLint:
 
-~~~bash
 npm run lint
-~~~
 
-### Environment and security
+<a id="supabase-en"></a>
 
-| Variable | Purpose |
-| --- | --- |
-| <code>VITE_TMDB_TOKEN</code> | TMDB API Read Access Token |
-| <code>VITE_SUPABASE_URL</code> | Supabase project URL |
-| <code>VITE_SUPABASE_ANON_KEY</code> | Supabase publishable/anon key |
+Supabase setup
 
-> [!WARNING]
-> **Never commit your real <code>.env</code> file.** Variables prefixed with <code>VITE_</code> are included in the browser bundle and must not contain server-side secrets. Never use a Supabase <code>service_role</code> or Secret Key in the client app. Protect personal data with correct RLS policies.
+1. Create a project in the Supabase Dashboard.
+2. Copy the Project URL and public publishable/anon key from the project settings.
+3. Add these values to your local .env and to the Vercel project’s Environment Variables.
+4. Make sure the database has the tables and relations queried by the application.
+5. Configure Row Level Security (RLS) so personal records and ratings are only available to their owners, and shared features grant access only to intended participants.
+6. Configure authentication redirect URLs.
 
-### Project structure
+Example URLs for local development and the current deployment:
 
-~~~text
+http://localhost:5173/**
+https://cinelog-movie.vercel.app/**
+
+Use https://cinelog-movie.vercel.app as the production Site URL if this is the canonical address for your deployment. Update the setting if your primary domain changes.
+
+Documentation: Supabase Auth Redirect URLs.
+
+<a id="env-en"></a>
+
+Environment variables
+
+|Variable                |Required|Purpose                                       |
+|------------------------|:------:|----------------------------------------------|
+|`VITE_TMDB_TOKEN`       |Yes     |TMDB API Read Access Token for movie requests.|
+|`VITE_SUPABASE_URL`     |Yes     |Supabase project URL.                         |
+|`VITE_SUPABASE_ANON_KEY`|Yes     |Public Supabase client key (publishable/anon).|
+
+Where to get them
+
+• TMDB: create an account and generate an API Read Access Token in API settings. Do not use your TMDB account password.
+• Supabase URL and key: open your Supabase project dashboard and find the project API settings.
+
+Vercel deployment
+
+After adding or changing environment variables in Vercel, trigger a new deployment so the values are included in the build. Check that the variables are set for the appropriate environments — usually Production, and optionally Preview and Development.
+
+<a id="structure-en"></a>
+
+Repository structure
+
 cinelog/
-├── components/           # Shared UI components
-│   ├── AddMovieModal.jsx
-│   ├── MovieCard.jsx
-│   ├── MovieJournal.jsx
-│   └── Navbar.jsx
-├── pages/                # Application pages
-│   ├── Auth.jsx
-│   ├── Films.jsx
-│   ├── Home.jsx
-│   ├── Movie.jsx
-│   ├── Profile.jsx
-│   ├── Recommendations.jsx
-│   ├── Statistics.jsx
-│   ├── Timeline.jsx
-│   ├── Together.jsx
-│   └── Watchlist.jsx
-├── sql/                  # Supabase migrations
+├── components/                 # Reusable UI components
+│   ├── AddMovieModal.jsx       # Add-movie modal
+│   ├── MovieCard.jsx           # Movie card
+│   ├── MovieJournal.jsx        # Viewing journal
+│   ├── Navbar.jsx              # Navigation
+│   └── Stat.jsx                # Statistic component
+├── pages/                      # Application pages
+│   ├── Auth.jsx                # Sign in and registration
+│   ├── Home.jsx                # Home
+│   ├── Films.jsx               # Movie library
+│   ├── Watchlist.jsx            # Watchlist
+│   ├── Movie.jsx                # Movie details
+│   ├── Timeline.jsx             # Timeline
+│   ├── Statistics.jsx           # Statistics
+│   ├── Recommendations.jsx      # Recommendations
+│   ├── Together.jsx              # Shared features
+│   └── Profile.jsx               # User profile
+├── public/                      # Static assets
+├── sql/                         # Supabase SQL scripts/migrations
 ├── src/
-│   ├── App.jsx
-│   ├── supabaseMovies.js
-│   └── tmdb.js
-├── supabase.js
-├── index.html
-├── package.json
-└── README.md
-~~~
+│   ├── App.jsx                  # Main routes and app state
+│   ├── main.jsx                 # React entry point
+│   ├── tmdb.js                  # TMDB API helpers
+│   ├── supabaseMovies.js        # Movie-library data access
+│   ├── storage.js               # Storage helpers
+│   ├── index.css                # Base styles and design tokens
+│   └── App.css                  # Page and component styles
+├── supabase.js                  # Supabase client
+├── index.html                   # HTML entry template
+├── vite.config.js               # Vite configuration
+├── package.json                # Scripts and dependencies
+├── package-lock.json            # Locked npm dependency tree
+└── README.md                    # Project documentation
 
-### Design principles
+<a id="security-en"></a>
 
-- **Film first.** Artwork and titles come before decoration.
-- **Ratings stay personal.** Each user owns their own rating.
-- **Metadata is separate from user data.** A film can exist in multiple personal archives.
-- **Real data only.** Statistics reflect records that actually exist.
-- **Quiet interface.** Typography and motion support the content.
+Security and privacy
 
-### Roadmap
+> [!CAUTION]
+> **Do not commit your real `.env` file or publish administrative keys.** Every variable prefixed with `VITE_` is available to client-side JavaScript after the build.
 
-- [x] TMDB search and movie details
-- [x] Personal library, watchlist and ratings
-- [x] Timeline and statistics
-- [x] Supabase authentication and user-owned records
-- [x] Profile and favorite genres
-- [x] Shared cinema and rating comparison
-- [x] Recommendations
-- [x] Viewing journal and rewatches
-- [ ] Library import / export
-- [ ] Custom lists
-- [ ] Yearly recap based on real user data
+• Never put the Supabase service_role or Secret Key in the frontend.
+• Use only the public client key intended for VITE_SUPABASE_ANON_KEY.
+• Treat the TMDB token as a client-exposed value in this architecture: browser requests use it, so it is not a hidden server-side secret.
+• Enable and verify RLS on tables containing personal data. Using Supabase alone does not automatically secure every table.
+• Never commit personal records, tokens, keys or local environment files.
+• If a key is accidentally committed to a public repository, revoke or rotate it with the provider.
 
-### TMDB attribution
+<a id="faq-en"></a>
 
-CineLog uses the TMDB API for movie search, metadata, posters and backdrops. **CineLog is not endorsed or certified by TMDB.** Related data and artwork remain the property of their respective owners.
+FAQ and troubleshooting
 
----
+<details>
+<summary><strong>The site loads a blank screen</strong></summary>
+
+1. Open DevTools → Console and inspect the first red error.
+2. Check Network to see whether JavaScript, CSS and API requests load successfully.
+3. Verify that Vercel’s deployment status is Ready.
+4. Check vite.config.js: for a site deployed at a domain root, base: '/' is usually appropriate.
+5. Rebuild after configuration changes and hard-refresh the page.
+
+</details>
+
+<details>
+<summary><strong>Movie search does not work</strong></summary>
+
+• Check VITE_TMDB_TOKEN in .env or in Vercel settings.
+• Restart Vite after changing .env; trigger a new Vercel deployment after changing hosted environment variables.
+• Inspect API requests and responses in DevTools → Network. Do not share your token in screenshots or logs.
+
+</details>
+
+<details>
+<summary><strong>Sign-in, registration or redirects fail</strong></summary>
+
+• Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.
+• Check Authentication → URL Configuration in Supabase.
+• Make sure the current domain is allowed under Redirect URLs.
+• Inspect browser errors and email-confirmation settings in Supabase Auth.
+
+</details>
+
+<details>
+<summary><strong>Posters or images are missing</strong></summary>
+
+• Check poster_path and backdrop_path in the TMDB response.
+• Make sure requests to image.tmdb.org are not blocked by the network or browser extensions.
+• When an image genuinely does not exist, the interface should display a graceful fallback instead of breaking the card.
+
+</details>
+
+<details>
+<summary><strong>Can I stream movies on CineLog?</strong></summary>
+
+No. CineLog is a catalogue, personal archive and viewing journal. It does not host or stream films.
+
+</details>
+
+<a id="roadmap-en"></a>
+
+Roadmap
+
+Currently implemented in the project
+
+☑ TMDB search and movie metadata
+☑ Personal archive and film statuses
+☑ Personal ratings and watchlist
+☑ Movie detail pages
+☑ Supabase authentication
+☑ User profile
+☑ Timeline and statistics
+☑ Recommendations
+☑ Shared area
+☑ Viewing journal and rewatches
+
+Potential improvements
+
+☐ Personal archive import and export
+☐ Custom collections and lists
+☐ Yearly recap based on actual user data
+☐ Better mobile navigation and loading states
+☐ More robust fallback states for missing posters and API errors
+☐ Improved accessibility: keyboard navigation, contrast and accessible labels
+
+The roadmap can change as the project is tested and developed. A feature checklist does not replace testing a specific deployment.
+
+<a id="credits-en"></a>
+
+TMDB attribution and content rights
+
+CineLog uses the TMDB API for movie search and metadata, including image assets when available. CineLog is an independent project and is not endorsed or certified by TMDB.
+
+TMDB: website · API documentation · API settings.
+
+Movie titles, posters, backdrops and related data remain the property of their respective rights holders and are provided under the source’s terms.
+
+<a id="contributing-en"></a>
+
+Contributing
+
+Found a bug or have an idea? Open a GitHub Issue and include:
+
+1. What you expected to happen.
+2. What happened instead.
+3. Steps to reproduce the issue.
+4. Browser and device details, if the issue is UI-related.
+5. A screenshot, with personal data and keys hidden.
+
+To contribute code, create a fork and open a pull request with a brief explanation of the change. For large UI changes, discussing the idea in an Issue first is helpful.
+
+License
+
+At the time this README was written, the repository does not include a LICENSE file. Until a license is added, the code should not be assumed to be freely available for unrestricted reuse. If open reuse is intended, choose and add a license first.
+
+────────
 
 <div align="center">
 
-**CineLog — твоя история кино начинается с одного фильма.**<br>
-**CineLog — your cinema history starts with one film.**
+CineLog
 
-<br>
+Твоя история кино начинается с одного фильма.
+Your cinema history starts with one film.
 
-<a href="https://github.com/zvozvozvo/cinelog"><img src="https://img.shields.io/badge/STAR-THIS_REPOSITORY-BAF35A?style=for-the-badge&logo=github&logoColor=10130F&labelColor=10130F" alt="Star this repository"></a>
-<a href="https://github.com/zvozvozvo/cinelog/issues"><img src="https://img.shields.io/badge/IDEAS_&_BUGS-OPEN_AN_ISSUE-EDEBE4?style=for-the-badge&labelColor=10130F" alt="Open an issue"></a>
+<p>
+  <a href="https://cinelog-movie.vercel.app/">
+    <img src="https://img.shields.io/badge/ПОПРОБОВАТЬ-CineLog-B9F45A?style=for-the-badge&logo=vercel&logoColor=111111&labelColor=111111" alt="Попробовать CineLog">
+  </a>
+  <a href="https://github.com/zvozvozvo/cinelog">
+    <img src="https://img.shields.io/badge/STAR-THIS_REPOSITORY-EDEBE4?style=for-the-badge&logo=github&logoColor=111111&labelColor=111111" alt="Star this repository">
+  </a>
+  <a href="https://github.com/zvozvozvo/cinelog/issues">
+    <img src="https://img.shields.io/badge/IDEAS_&_BUGS-OPEN_AN_ISSUE-222722?style=for-the-badge&logo=github&logoColor=white&labelColor=111111" alt="Open an issue">
+  </a>
+</p>
 
 <sub>Made for people who remember how a film made them feel.</sub>
 
