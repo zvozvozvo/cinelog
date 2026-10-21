@@ -1,6 +1,6 @@
-import { Clock3, Film, Star } from "lucide-react";
+import { Clock3, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { getPoster } from "../src/tmdb";
+import MoviePoster from "../components/MoviePoster";
 
 function formatTime(minutes) {
   if (!minutes) return "—";
@@ -166,53 +166,9 @@ export default function Timeline({ movies }) {
                       md:gap-7
                     "
                   >
-                    <div className="aspect-[2/3] overflow-hidden bg-[#101310]">
-                      {movie.poster_path ? (
-                        <img
-                          src={getPoster(
-                            movie.poster_path,
-                            "w185"
-                          )}
-                          alt={title}
-                          loading="lazy"
-                          className="
-                            h-full
-                            w-full
-                            object-cover
-                            opacity-80
-                            transition-all
-                            duration-500
-                            group-hover:scale-[1.025]
-                            group-hover:opacity-100
-                          "
-                        />
-                      ) : movie.poster ? (
-                        <img
-                          src={movie.poster}
-                          alt={title}
-                          loading="lazy"
-                          className="
-                            h-full
-                            w-full
-                            object-cover
-                            opacity-80
-                            transition-all
-                            duration-500
-                            group-hover:scale-[1.025]
-                            group-hover:opacity-100
-                          "
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <Film
-                            size={16}
-                            strokeWidth={1.4}
-                            className="text-white/15"
-                          />
-                        </div>
-                      )}
+                    <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-[#101310]">
+                      <MoviePoster movie={movie} alt={title} size="w185" className="absolute inset-0 h-full w-full object-cover opacity-90 transition-all duration-500 group-hover:scale-[1.025] group-hover:opacity-100" />
                     </div>
-
                     <div className="min-w-0 self-center">
                       <h2
                         className="

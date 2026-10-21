@@ -12,6 +12,7 @@ import {
   Heart,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import MoviePoster from "../components/MoviePoster";
 
 function formatTime(minutes) {
   if (!minutes) return "—";
@@ -195,26 +196,26 @@ export default function Statistics({ movies = [] }) {
     const counts = {};
 
     watched.forEach((movie) => {
-      const genres = String(
-        movie.genre || ""
-      )
-        .split(",")
-        .map((genre) => genre.trim())
-        .filter(Boolean);
+      const parsedGenres = Array.isArray(movie.genres)
+        ? movie.genres
+        : typeof movie.genres === "string"
+          ? movie.genres.split(",")
+          : [];
+      const legacyGenres = typeof movie.genre === "string" ? movie.genre.split(",") : [];
+      const genres = [...parsedGenres, ...legacyGenres]
+        .map((genre) => typeof genre === "string" ? genre : genre?.name)
+        .filter((genre) => typeof genre === "string" && genre.trim())
+        .map((genre) => genre.trim());
 
-      genres.forEach((genre) => {
-        counts[genre] =
-          (counts[genre] || 0) + 1;
+      [...new Set(genres)].forEach((genre) => {
+        counts[genre] = (counts[genre] || 0) + 1;
       });
     });
 
     return Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 6)
-      .map(([name, count]) => ({
-        name,
-        count,
-      }));
+      .map(([name, count]) => ({ name, count }));
   }, [watched]);
 
   const maxGenreCount = Math.max(
@@ -229,25 +230,18 @@ export default function Statistics({ movies = [] }) {
 
     watched.forEach((movie) => {
       const year = String(
-        movie.year || ""
+        movie.year || movie.release_date?.slice(0, 4) || movie.releaseDate?.slice(0, 4) || ""
       ).trim();
 
       if (/^\d{4}$/.test(year)) {
-        counts[year] =
-          (counts[year] || 0) + 1;
+        counts[year] = (counts[year] || 0) + 1;
       }
     });
 
     return Object.entries(counts)
-      .sort(
-        (a, b) =>
-          Number(a[0]) - Number(b[0])
-      )
+      .sort((a, b) => Number(a[0]) - Number(b[0]))
       .slice(-8)
-      .map(([year, count]) => ({
-        year,
-        count,
-      }));
+      .map(([year, count]) => ({ year, count }));
   }, [watched]);
 
   const maxYearCount = Math.max(
@@ -660,7 +654,7 @@ export default function Statistics({ movies = [] }) {
             </span>
 
             <h2 className="cine-serif text-4xl tracking-[-.035em] text-[var(--paper)]">
-              Our cinema
+              Наше кино
             </h2>
           </div>
 
@@ -669,7 +663,7 @@ export default function Statistics({ movies = [] }) {
             onClick={() => navigate("/together")}
             className="cine-mono text-[9px] uppercase tracking-[.14em] text-white/25 transition-colors hover:text-[var(--acid)]"
           >
-            Open together →
+            Смотреть вместе →
           </button>
         </div>
 
@@ -679,7 +673,7 @@ export default function Statistics({ movies = [] }) {
               icon={<Heart size={17} strokeWidth={1.5} />}
               value={`${togetherStats.match.toFixed(0)}%`}
               label="Совпадение вкусов"
-              detail={`${togetherStats.shared.length} films rated by both`}
+              detail={`${togetherStats.shared.length} общих оценок`}
             />
 
             <StatBlock
@@ -699,7 +693,7 @@ export default function Statistics({ movies = [] }) {
         ) : (
           <div className="border-y border-dashed border-white/[.10] py-16 text-center">
             <p className="cine-mono text-[9px] uppercase tracking-[.12em] text-white/20">
-              Rate the same watched films to build your shared cinema profile.
+              Оценивайте одни и те же фильмы, чтобы увидеть, насколько совпадают ваши вкусы.
             </p>
           </div>
         )}
@@ -746,27 +740,9 @@ export default function Statistics({ movies = [] }) {
                 hover:border-[#b7f34a]/30
               "
             >
-              <div className="h-[110px] w-[74px] shrink-0 overflow-hidden bg-white/[.04]">
-                {stats.longestMovie.poster ? (
-                  <img
-                    src={
-                      stats.longestMovie.poster
-                    }
-                    alt={
-                      stats.longestMovie.title
-                    }
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                  />
-                ) : (
-                  <div className="grid h-full place-items-center text-white/15">
-                    <Film
-                      size={18}
-                      strokeWidth={1.4}
-                    />
-                  </div>
-                )}
+              <div className="relative h-[110px] w-[74px] shrink-0 overflow-hidden rounded-lg bg-white/[.04]">
+                <MoviePoster movie={stats.longestMovie} alt={stats.longestMovie.title || "Самый длинный фильм"} size="w185" className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
               </div>
-
               <div className="min-w-0 flex-1">
                 <h3 className="cine-serif text-2xl tracking-[-.025em] text-[#eeeae0]">
                   {stats.longestMovie.title}
@@ -842,23 +818,9 @@ export default function Statistics({ movies = [] }) {
                       text-left
                     "
                   >
-                    <div className="h-[58px] w-[40px] shrink-0 overflow-hidden bg-white/[.04]">
-                      {movie.poster ? (
-                        <img
-                          src={movie.poster}
-                          alt=""
-                          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
-                        />
-                      ) : (
-                        <div className="grid h-full place-items-center text-white/15">
-                          <Film
-                            size={13}
-                            strokeWidth={1.4}
-                          />
-                        </div>
-                      )}
+                    <div className="relative h-[58px] w-[40px] shrink-0 overflow-hidden rounded-md bg-white/[.04]">
+                      <MoviePoster movie={movie} alt={movie.title || movie.originalTitle || "Фильм"} size="w185" className="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
                     </div>
-
                     <div className="min-w-0 flex-1">
                       <p className="truncate cine-serif text-lg text-white/65 transition-colors group-hover:text-white">
                         {movie.title}

@@ -3,6 +3,7 @@ import { ArrowRight, Bookmark, Clock3, Film, Plus, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import MovieCard from "../components/MovieCard";
+import MoviePoster from "../components/MoviePoster";
 import { getBackdrop, getPoster } from "../src/tmdb";
 
 function formatTime(totalMinutes) {
@@ -65,7 +66,6 @@ export default function Home({ movies = [], onAddMovie }) {
   const averageRating = rated.length ? (rated.reduce((sum, movie) => sum + Number(movie.personalRating ?? movie.youRating), 0) / rated.length).toFixed(1) : "—";
   const totalRuntime = watched.reduce((sum, movie) => sum + (Number(movie.runtime) > 0 ? Number(movie.runtime) : 0), 0);
   const heroBackdrop = featured ? (getImage(featured.backdrop_path || featured.backdrop || featured.backdropUrl) || getImage(featured.poster_path || featured.poster || featured.posterUrl, "poster")) : null;
-  const featuredPoster = featured ? getImage(featured.poster_path || featured.poster || featured.posterUrl, "poster") : null;
 
   return (
     <div className="cine-home">
@@ -102,8 +102,8 @@ export default function Home({ movies = [], onAddMovie }) {
             <section className="home-section">
               <SectionHeading number="02" title="Фильм из твоей истории" action="Открыть карточку" onAction={() => navigate(`/movie/${featured.id}`)} />
               <button type="button" className="cine-featured-film" onClick={() => navigate(`/movie/${featured.id}`)}>
-                <div className="cine-featured-film__art">
-                  {featuredPoster ? <img src={featuredPoster} alt={`Постер фильма «${featured.title || featured.name || ""}»`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; }} /> : <Film size={30} strokeWidth={1.3} />}
+                <div className="cine-featured-film__art relative">
+                  <MoviePoster movie={featured} alt={`Постер фильма «${featured.title || featured.name || "Фильм"}»`} size="w500" className="absolute inset-0 h-full w-full object-cover" />
                 </div>
                 <div className="cine-featured-film__copy">
                   <span className="cine-featured-film__eyebrow">ИЗ ТВОЕГО АРХИВА</span>
