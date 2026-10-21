@@ -23,7 +23,7 @@ const SORTS = [
 const VIEW_TABS = [
   { key: "all", path: "/films", label: "Все фильмы" },
   { key: "watched", path: "/watched", label: "Просмотрено" },
-  { key: "rated", path: "/rated", label: "Мои оценки" },
+  { key: "rated", path: "/rated", label: "С оценкой" },
   { key: "watchlist", path: "/watchlist", label: "К просмотру" },
 ];
 
@@ -37,26 +37,26 @@ function getViewConfig(mode) {
     return {
       kicker: "ТВОЯ ИСТОРИЯ / ПРОСМОТРЕНО",
       title: "Уже посмотрел",
-      subtitle: "Все фильмы, которые ты посмотрел. Оценку можно поставить позже.",
+      subtitle: "Фильмы, которые ты посмотрел. Личная оценка не обязательна.",
       emptyTitle: "Пока нет просмотренных фильмов",
-      emptyText: "Добавляй просмотренное в архив, чтобы постепенно собрать личную историю кино.",
+      emptyText: "Добавляй просмотренное в архив, чтобы собрать личную историю кино.",
       emptyIcon: CheckCircle2,
     };
   }
   if (mode === "rated") {
     return {
-      kicker: "ТВОЯ КОЛЛЕКЦИЯ / ЛИЧНЫЙ РЕЙТИНГ",
-      title: "Мои оценки",
-      subtitle: "Только фильмы, которым ты поставил личную оценку. Лучшие всегда под рукой.",
-      emptyTitle: "Здесь появятся фильмы с оценкой",
-      emptyText: "Отметь фильм как просмотренный и поставь оценку от 0 до 10.",
+      kicker: "КИНОАРХИВ / С ОЦЕНКОЙ",
+      title: "С оценкой",
+      subtitle: "Фильмы, которым ты поставил личную оценку. Это фильтр внутри архива, а не отдельный раздел.",
+      emptyTitle: "Нет фильмов с оценкой",
+      emptyText: "Отметь фильм как просмотренный и поставь ему личную оценку.",
       emptyIcon: Star,
     };
   }
   return {
-    kicker: "ТВОЯ КОЛЛЕКЦИЯ / ЛИЧНЫЙ АРХИВ",
+    kicker: "ТВОЯ КОЛЛЕКЦИЯ",
     title: "Киноархив",
-    subtitle: "Всё кино, которое ты уже посмотрел или сохранил на потом.",
+    subtitle: "Все фильмы, которые ты уже посмотрел или сохранил на потом.",
     emptyTitle: "Архив пока пуст",
     emptyText: "Добавь фильм, чтобы начать собирать собственную историю кино.",
     emptyIcon: Film,
@@ -140,7 +140,7 @@ export default function Films({ movies = [], onAddMovie, mode = "all" }) {
         </div>
       </section>
 
-      <nav className="cine-archive-tabs" aria-label="Представления киноархива">
+      <nav className="cine-archive-tabs" aria-label="Фильтры киноархива">
         {VIEW_TABS.map((tab) => {
           const active = tab.key === mode;
           const Icon = tab.key === "rated" ? Star : tab.key === "watched" ? CheckCircle2 : tab.key === "watchlist" ? Bookmark : Film;
@@ -167,7 +167,7 @@ export default function Films({ movies = [], onAddMovie, mode = "all" }) {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder={mode === "rated" ? "Найти оценённый фильм..." : "Поиск по названию фильма..."}
+            placeholder={mode === "rated" ? "Найти фильм с оценкой..." : "Найти фильм по названию..."}
             aria-label="Найти фильм в архиве"
           />
           {query && <button type="button" onClick={clearSearch} aria-label="Очистить поиск"><X size={16} /></button>}

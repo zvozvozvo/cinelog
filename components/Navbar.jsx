@@ -11,7 +11,6 @@ import {
   Plus,
   Search,
   Sparkles,
-  Star,
   UserRound,
   Users,
   X,
@@ -26,9 +25,8 @@ const navigationGroups = [
   {
     label: "Моя коллекция",
     items: [
-      { name: "Все фильмы", path: "/films", icon: Film },
+      { name: "Киноархив", path: "/films", icon: Film },
       { name: "Просмотрено", path: "/watched", icon: CheckCircle2 },
-      { name: "Мои оценки", path: "/rated", icon: Star },
       { name: "К просмотру", path: "/watchlist", icon: Bookmark },
       { name: "История", path: "/timeline", icon: Clock3 },
       { name: "Статистика", path: "/statistics", icon: BarChart3 },
@@ -45,7 +43,6 @@ const navigationGroups = [
 ];
 
 const mobileMoreLinks = [
-  { name: "Мои оценки", description: "Фильмы, которым ты поставил оценку", path: "/rated", icon: Star },
   { name: "Просмотрено", description: "Всё, что ты уже посмотрел", path: "/watched", icon: CheckCircle2 },
   { name: "К просмотру", description: "Список фильмов на потом", path: "/watchlist", icon: Bookmark },
   { name: "История", description: "Хронология твоих записей", path: "/timeline", icon: Clock3 },
@@ -82,7 +79,7 @@ function isArchivePath(pathname) {
 
 function isPathActive(path, pathname) {
   if (path === "/") return pathname === "/";
-  if (path === "/films") return pathname === "/films";
+  if (path === "/films") return pathname === "/films" || pathname === "/rated";
   return pathname === path || pathname.startsWith(`${path}/`);
 }
 
@@ -119,7 +116,7 @@ export default function Navbar({ onAddMovie }) {
 
   function renderLink(link, mobile = false) {
     const active = link.path === "/films"
-      ? (mobile ? isArchivePath(location.pathname) : location.pathname === "/films")
+      ? (mobile ? isArchivePath(location.pathname) : isPathActive(link.path, location.pathname))
       : isPathActive(link.path, location.pathname);
     const Icon = link.icon;
 
@@ -176,7 +173,7 @@ export default function Navbar({ onAddMovie }) {
           <div className="cine-sidebar__signature">
             <span className="cine-sidebar__signature-dot" />
             <span>ЛИЧНЫЙ КИНОАРХИВ</span>
-            <span>2026</span>
+            <span>CL</span>
           </div>
         </div>
       </aside>
@@ -199,7 +196,7 @@ export default function Navbar({ onAddMovie }) {
             type="search"
             value={globalSearch}
             onChange={(event) => setGlobalSearch(event.target.value)}
-            placeholder="Поиск по архиву и фильмам..."
+            placeholder="Найти фильм в архиве..."
           />
           {globalSearch && (
             <button
