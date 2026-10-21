@@ -51,7 +51,7 @@ function getHerRating(movie) {
 function StatBlock({ icon, value, label, detail }) {
   return (
     <div className="border border-white/[.10] bg-white/[.025] p-6">
-      <div className="flex items-center gap-3 text-[#b7f34a]">
+      <div className="flex items-center gap-3 text-[#aab5ff]">
         {icon}
 
         <span className="cine-mono text-[8px] uppercase tracking-[.16em] text-white/25">
@@ -473,7 +473,7 @@ export default function Statistics({ movies = [] }) {
 
                       <div className="h-[3px] overflow-hidden bg-white/[.07]">
                         <div
-                          className="h-full bg-[#b7f34a] transition-all duration-700"
+                          className="h-full bg-[#aab5ff] transition-all duration-700"
                           style={{
                             width: `${width}%`,
                           }}
@@ -620,7 +620,7 @@ export default function Statistics({ movies = [] }) {
                         <div
                           className="
                             w-full
-                            bg-[#b7f34a]
+                            bg-[#aab5ff]
                             transition-all
                             duration-700
                           "
@@ -737,7 +737,7 @@ export default function Statistics({ movies = [] }) {
                 py-5
                 text-left
                 transition-colors
-                hover:border-[#b7f34a]/30
+                hover:border-[#aab5ff]/30
               "
             >
               <div className="relative h-[110px] w-[74px] shrink-0 overflow-hidden rounded-lg bg-white/[.04]">
@@ -753,7 +753,7 @@ export default function Statistics({ movies = [] }) {
                     "—"}
                 </p>
 
-                <p className="mt-5 cine-mono text-[10px] uppercase tracking-[.12em] text-[#b7f34a]">
+                <p className="mt-5 cine-mono text-[10px] uppercase tracking-[.12em] text-[#aab5ff]">
                   {formatTime(
                     stats.longestMovie
                       .runtime
@@ -764,7 +764,7 @@ export default function Statistics({ movies = [] }) {
               <ArrowRight
                 size={15}
                 strokeWidth={1.6}
-                className="shrink-0 text-white/20 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#b7f34a]"
+                className="shrink-0 text-white/20 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#aab5ff]"
               />
             </button>
           ) : (
@@ -837,7 +837,7 @@ export default function Statistics({ movies = [] }) {
                     <ArrowRight
                       size={14}
                       strokeWidth={1.5}
-                      className="shrink-0 text-white/10 transition-all group-hover:translate-x-1 group-hover:text-[#b7f34a]"
+                      className="shrink-0 text-white/10 transition-all group-hover:translate-x-1 group-hover:text-[#aab5ff]"
                     />
                   </button>
                 )
@@ -889,7 +889,7 @@ export default function Statistics({ movies = [] }) {
               tracking-[.14em]
               text-white/30
               transition-colors
-              hover:text-[#b7f34a]
+              hover:text-[#aab5ff]
             "
           >
             На главную

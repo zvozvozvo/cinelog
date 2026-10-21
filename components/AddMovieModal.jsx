@@ -226,11 +226,11 @@ export default function AddMovieModal({ onClose, onAdd }) {
         <motion.div
           initial={{ opacity: 0, y: 25, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#080c09] shadow-[0_30px_120px_rgba(0,0,0,.7)]"
+          className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111622] shadow-[0_30px_120px_rgba(0,0,0,.7)]"
         >
           <div className="flex items-center justify-between border-b border-white/[.07] px-6 py-5">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[.25em] text-[#d8ff65]/70">
+              <p className="text-[10px] font-semibold uppercase tracking-[.25em] text-[#aab5ff]/70">
                 Личный киноархив
               </p>
               <h2 className="mt-1 text-2xl font-semibold tracking-[-.04em]">
@@ -261,12 +261,12 @@ export default function AddMovieModal({ onClose, onAdd }) {
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Название фильма..."
-                    className="h-14 w-full rounded-xl border border-white/10 bg-white/[.035] pl-12 pr-12 text-base text-white outline-none placeholder:text-white/20 focus:border-[#d8ff65]/35"
+                    className="h-14 w-full rounded-xl border border-white/10 bg-white/[.035] pl-12 pr-12 text-base text-white outline-none placeholder:text-white/20 focus:border-[#aab5ff]/35"
                   />
                   {searching && (
                     <LoaderCircle
                       size={18}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 animate-spin text-[#d8ff65]"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 animate-spin text-[#aab5ff]"
                     />
                   )}
                 </div>
@@ -302,7 +302,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                         <div className="mt-2 flex gap-3 text-xs text-white/25">
                           <span>{movie.release_date?.slice(0, 4) || "—"}</span>
                           {movie.vote_average > 0 && (
-                            <span className="inline-flex items-center gap-1 text-[#d8ff65]/70">
+                            <span className="inline-flex items-center gap-1 text-[#aab5ff]/70">
                               <Star size={11} fill="currentColor" />
                               {Number(movie.vote_average).toFixed(1)}
                             </span>
@@ -353,7 +353,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                           setQuery("");
                           setError("");
                         }}
-                        className="cursor-pointer text-xs uppercase tracking-[.12em] text-white/25 hover:text-[#d8ff65] disabled:opacity-40"
+                        className="cursor-pointer text-xs uppercase tracking-[.12em] text-white/25 hover:text-[#aab5ff] disabled:opacity-40"
                       >
                         Изменить
                       </button>
@@ -367,7 +367,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                         <Clock3 size={13} />
                         {formatRuntime(selected.runtime)}
                       </span>
-                      <span className="inline-flex items-center gap-1.5 text-[#d8ff65]/70">
+                      <span className="inline-flex items-center gap-1.5 text-[#aab5ff]/70">
                         <Star size={13} fill="currentColor" />
                         {Number(selected.vote_average || 0).toFixed(1)}
                       </span>
@@ -396,16 +396,16 @@ export default function AddMovieModal({ onClose, onAdd }) {
                         onClick={() => setStatus(key)}
                         className={`cursor-pointer rounded-xl border p-4 text-left disabled:opacity-50 ${
                           status === key
-                            ? "border-[#d8ff65]/35 bg-[#d8ff65]/[.07]"
+                            ? "border-[#aab5ff]/35 bg-[#aab5ff]/[.07]"
                             : "border-white/[.07] bg-white/[.02]"
                         }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className={`text-sm font-semibold ${status === key ? "text-[#d8ff65]" : "text-white/70"}`}>
+                          <span className={`text-sm font-semibold ${status === key ? "text-[#aab5ff]" : "text-white/70"}`}>
                             {label}
                           </span>
                           {status === key && (
-                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#d8ff65] text-black">
+                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#aab5ff] text-black">
                               <Check size={14} />
                             </span>
                           )}
@@ -417,15 +417,15 @@ export default function AddMovieModal({ onClose, onAdd }) {
                 </div>
 
                 {status === "watched" && (
-                  <div className="mt-8 rounded-2xl border border-[#d8ff65]/15 bg-[#d8ff65]/[.025] p-5">
+                  <div className="mt-8 rounded-2xl border border-[#aab5ff]/15 bg-[#aab5ff]/[.025] p-5">
                     <div className="flex items-end justify-between">
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[.2em] text-[#d8ff65]/70">
+                        <p className="text-[10px] font-semibold uppercase tracking-[.2em] text-[#aab5ff]/70">
                           Твоя оценка
                         </p>
                         <p className="mt-1 text-sm text-white/35">{ratingLabel}</p>
                       </div>
-                      <div className="flex items-center gap-2 text-[#d8ff65]">
+                      <div className="flex items-center gap-2 text-[#aab5ff]">
                         <Star size={20} fill="currentColor" />
                         <span className="text-3xl font-semibold">{rating.toFixed(1)}</span>
                         <span className="text-sm text-white/25">/ 10</span>
@@ -441,7 +441,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                       onChange={(event) => setRating(Number(event.target.value))}
                       className="rating-slider mt-7 h-2 w-full cursor-pointer appearance-none rounded-full disabled:opacity-50"
                       style={{
-                        background: `linear-gradient(to right,#d8ff65 ${rating * 10}%,rgba(255,255,255,.08) ${rating * 10}%)`,
+                        background: `linear-gradient(to right,#aab5ff ${rating * 10}%,rgba(255,255,255,.08) ${rating * 10}%)`,
                       }}
                     />
                     <div className="mt-3 flex justify-between text-[10px] font-semibold uppercase tracking-[.1em] text-white/20">
@@ -456,7 +456,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                   type="button"
                   onClick={addSelected}
                   disabled={loadingDetails || saving}
-                  className="mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#d8ff65] py-4 text-sm font-bold uppercase tracking-[.12em] text-black hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#aab5ff] py-4 text-sm font-bold uppercase tracking-[.12em] text-black hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {saving ? (
                     <LoaderCircle size={17} className="animate-spin" />

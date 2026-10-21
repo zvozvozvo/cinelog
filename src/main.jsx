@@ -8,6 +8,7 @@ import "./App.css";
 import "./cinelog-refresh.css";
 import "./cinelog-global.css";
 import "./cinelog-cinema.css";
+import "./cinelog-color-compat.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

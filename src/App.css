@@ -227,7 +227,7 @@
 }
 
 .cine-card:hover .cine-card__poster {
-  border-color: rgba(185, 244, 90, 0.32);
+  border-color: rgba(170, 181, 255, 0.32);
 }
 
 .cine-card__poster img {
@@ -341,7 +341,7 @@
   border: 2px solid var(--bg);
   background: var(--acid);
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(185, 244, 90, 0.25);
+  box-shadow: 0 0 0 1px rgba(170, 181, 255, 0.25);
 }
 
 .timeline-entry {
@@ -359,7 +359,7 @@
 
 .timeline-entry:hover {
   transform: translateX(4px);
-  border-top-color: rgba(185, 244, 90, 0.3);
+  border-top-color: rgba(170, 181, 255, 0.3);
 }
 
 .timeline-entry__poster {
@@ -781,7 +781,7 @@
 
 .cine-close:hover {
   color: var(--acid);
-  border-color: rgba(185, 244, 90, 0.35);
+  border-color: rgba(170, 181, 255, 0.35);
 }
 
 /* =========================================================
@@ -871,7 +871,7 @@
 }
 
 .detail-choice.is-active {
-  border-color: rgba(185, 244, 90, 0.42);
+  border-color: rgba(170, 181, 255, 0.42);
   background: var(--acid-soft);
 }
 
@@ -895,8 +895,8 @@
 .rating-box {
   margin-top: 22px;
   padding: 20px 0;
-  border-top: 1px solid rgba(185, 244, 90, 0.18);
-  border-bottom: 1px solid rgba(185, 244, 90, 0.18);
+  border-top: 1px solid rgba(170, 181, 255, 0.18);
+  border-bottom: 1px solid rgba(170, 181, 255, 0.18);
 }
 
 .rating-box__top {

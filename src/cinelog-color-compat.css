@@ -1,0 +1,99 @@
+/* CineLog palette compatibility layer.
+   Keeps legacy components aligned with the Cinema ink-blue / periwinkle theme. */
+:root {
+  --cinema-ink: #0b0e16;
+  --cinema-panel: #111622;
+  --cinema-lift: #191f2d;
+  --cinema-paper: #f1eee7;
+  --cinema-muted: #a9adba;
+  --cinema-accent: #aab5ff;
+}
+
+html,
+body {
+  color-scheme: dark;
+  background-color: var(--cinema-ink);
+}
+
+::selection {
+  background: rgba(170, 181, 255, .32);
+  color: #fff;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline-color: var(--cinema-accent);
+}
+
+/* Legacy movie-detail and poster components. */
+.cine-card:hover .cine-card__poster,
+.cine-card:hover .cine-card__poster img,
+.cine-featured-film:hover,
+.cine-poster-fallback__frame,
+.cine-home-empty__icon,
+.detail-choice.is-active {
+  border-color: rgba(170, 181, 255, .42);
+}
+
+.cine-card:hover .cine-card__title,
+.cine-poster-fallback__frame,
+.cine-home-empty__icon,
+.detail-choice.is-active strong,
+.rating-value {
+  color: var(--cinema-accent);
+}
+
+.detail-choice.is-active {
+  background: rgba(170, 181, 255, .09);
+}
+
+.rating-box {
+  border-top-color: rgba(170, 181, 255, .22);
+  border-bottom-color: rgba(170, 181, 255, .22);
+  background: rgba(170, 181, 255, .025);
+}
+
+.rating-slider {
+  accent-color: var(--cinema-accent);
+}
+
+.rating-slider::-webkit-slider-thumb {
+  accent-color: var(--cinema-accent);
+}
+
+.rating-slider::-moz-range-thumb {
+  border-color: var(--cinema-accent);
+  background: var(--cinema-accent);
+}
+
+/* Add-film modal and older utility-based screens use the same action color. */
+.cine-modal,
+[class*="bg-[#080c09]"] {
+  background-color: var(--cinema-panel);
+}
+
+.cine-modal .cine-button--solid,
+.cine-modal button[type="submit"] {
+  border-color: var(--cinema-accent);
+  background-color: var(--cinema-accent);
+  color: #101421;
+}
+
+.cine-modal .cine-button--solid:hover,
+.cine-modal button[type="submit"]:hover {
+  background-color: #c4cbff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

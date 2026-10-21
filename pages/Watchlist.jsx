@@ -48,7 +48,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
             </p>
 
             <div className="mt-4 flex items-center gap-5">
-              <span className="grid h-12 w-12 shrink-0 place-items-center border border-white/[.14] bg-[#0d110e] text-[#b7f34a]">
+              <span className="grid h-12 w-12 shrink-0 place-items-center border border-white/[.14] bg-[#171d2b] text-[#aab5ff]">
                 <Bookmark size={20} strokeWidth={1.5} />
               </span>
 
@@ -65,7 +65,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
           <button
             type="button"
             onClick={onAddMovie}
-            className="flex h-[52px] shrink-0 items-center justify-center gap-3 border border-[#b7f34a] bg-[#b7f34a] px-6 cine-mono text-[10px] font-bold uppercase tracking-[.15em] text-black transition duration-200 hover:bg-[#c7ff62]"
+            className="flex h-[52px] shrink-0 items-center justify-center gap-3 border border-[#aab5ff] bg-[#aab5ff] px-6 cine-mono text-[10px] font-bold uppercase tracking-[.15em] text-black transition duration-200 hover:bg-[#c4cbff]"
           >
             <Plus size={15} strokeWidth={2} />
             Добавить фильм
@@ -89,7 +89,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Поиск в списке «К просмотру»..."
-              className="h-[48px] w-full border-0 border-b border-white/[.20] bg-transparent pl-8 pr-10 cine-mono text-[11px] tracking-[.04em] text-[#eeeae0] outline-none placeholder:text-white/25 focus:border-[#b7f34a]"
+              className="h-[48px] w-full border-0 border-b border-white/[.20] bg-transparent pl-8 pr-10 cine-mono text-[11px] tracking-[.04em] text-[#eeeae0] outline-none placeholder:text-white/25 focus:border-[#aab5ff]"
             />
 
             {query && (
@@ -97,7 +97,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
                 type="button"
                 onClick={() => setQuery("")}
                 aria-label="Очистить поиск"
-                className="absolute right-0 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center text-white/30 hover:text-[#b7f34a]"
+                className="absolute right-0 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center text-white/30 hover:text-[#aab5ff]"
               >
                 <X size={14} strokeWidth={1.8} />
               </button>
@@ -111,7 +111,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
                 В списке
               </span>
 
-              <span className="ml-2 cine-mono text-[10px] uppercase tracking-[.1em] text-[#b7f34a]">
+              <span className="ml-2 cine-mono text-[10px] uppercase tracking-[.1em] text-[#aab5ff]">
                 {watchlist.length}
               </span>
             </div>
@@ -178,7 +178,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
             <div className="mx-auto max-w-[620px] text-center">
 
               <Bookmark
-                className="mx-auto text-[#b7f34a]"
+                className="mx-auto text-[#aab5ff]"
                 size={28}
                 strokeWidth={1.3}
               />
@@ -205,7 +205,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
                 <button
                   type="button"
                   onClick={onAddMovie}
-                  className="flex h-[50px] items-center justify-center gap-3 border border-[#b7f34a] bg-[#b7f34a] px-6 cine-mono text-[10px] font-bold uppercase tracking-[.15em] text-black transition hover:bg-[#c7ff62]"
+                  className="flex h-[50px] items-center justify-center gap-3 border border-[#aab5ff] bg-[#aab5ff] px-6 cine-mono text-[10px] font-bold uppercase tracking-[.15em] text-black transition hover:bg-[#c4cbff]"
                 >
                   <Plus size={14} strokeWidth={2} />
                   Добавить фильм
@@ -239,7 +239,7 @@ export default function Watchlist({ movies = [], onAddMovie }) {
           <button
             type="button"
             onClick={() => navigate("/films")}
-            className="group inline-flex items-center gap-3 cine-mono text-[9px] font-medium uppercase tracking-[.15em] text-white/35 transition-colors hover:text-[#b7f34a]"
+            className="group inline-flex items-center gap-3 cine-mono text-[9px] font-medium uppercase tracking-[.15em] text-white/35 transition-colors hover:text-[#aab5ff]"
           >
             Найти другой фильм
 
