@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
 import {
   ArrowRight,
@@ -145,6 +145,9 @@ export default function Recommendations({ movies = [], onAddMovie }) {
   const [notice, setNotice] = useState("");
   const [savingId, setSavingId] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  // Remember the last batch so a refresh does not simply return the same films.
+  const recommendationBatchIdsRef = useRef(new Set());
+  const recommendationPoolKeyRef = useRef("");
 
   const ownIds = useMemo(() => new Set(movies.map((movie) => String(movie.id))), [movies]);
   const acceptedConnections = useMemo(
@@ -288,6 +291,16 @@ export default function Recommendations({ movies = [], onAddMovie }) {
     setError("");
 
     try {
+      const poolKey = mode === "couple" ? `couple:${selectedPartnerId}` : "me";
+      if (recommendationPoolKeyRef.current !== poolKey) {
+        recommendationPoolKeyRef.current = poolKey;
+        recommendationBatchIdsRef.current = new Set();
+      }
+      const previouslyShownIds = new Set(recommendationBatchIdsRef.current);
+      const rotation = refreshKey % 12;
+      const popularPage = (rotation % 12) + 1;
+      const topRatedPage = ((rotation + 4) % 12) + 1;
+      const recentPage = ((rotation + 7) % 12) + 1;
       const watchedMine = movies.filter((movie) => movie.status === "watched");
       const watchedPartner = partnerMovies.filter((movie) => movie.status === "watched");
       const myPreferences = getPreferences(watchedMine);
@@ -334,23 +347,21 @@ export default function Recommendations({ movies = [], onAddMovie }) {
             ...topGenreIds(partnerPreferences, 3),
           ])].slice(0, 6);
 
-      const discoverParams = {
-        sort_by: "popularity.desc",
-        "vote_count.gte": 100,
-        page: 1,
-      };
+      const discoverParams = { "vote_count.gte": 100 };
       if (genreIdsForDiscover.length) {
         // TMDB's pipe separator means match any selected genre.
         discoverParams.with_genres = genreIdsForDiscover.join("|");
       }
 
       const tasks = [
-        discoverMovies(discoverParams),
+        discoverMovies({ ...discoverParams, sort_by: "popularity.desc", page: popularPage }),
+        discoverMovies({ ...discoverParams, sort_by: "vote_average.desc", "vote_count.gte": 250, page: topRatedPage }),
         discoverMovies({
           ...discoverParams,
-          sort_by: "vote_average.desc",
-          "vote_count.gte": 250,
-          page: 2,
+          sort_by: "release_date.desc",
+          "primary_release_date.lte": new Date().toISOString().slice(0, 10),
+          "vote_count.gte": 40,
+          page: recentPage,
         }),
         ...seedIds.map((seedId) => getMovieRecommendations(seedId)),
       ];
@@ -369,6 +380,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
       const excludedIds = new Set([
         ...movies.map((movie) => String(movie.id)),
         ...partnerMovies.map((movie) => String(movie.id)),
+        ...previouslyShownIds,
       ]);
 
       const ranked = [...pool.values()]
@@ -416,7 +428,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
         const fallback = await discoverMovies({
           sort_by: "popularity.desc",
           "vote_count.gte": 80,
-          page: 1,
+          page: popularPage,
         });
         const fallbackRanked = fallback
           .filter((candidate) => candidate?.id && candidate.title && !excludedIds.has(String(candidate.id)))
@@ -428,9 +440,23 @@ export default function Recommendations({ movies = [], onAddMovie }) {
             releaseYear: candidate.release_date?.slice(0, 4) || "Год неизвестен",
           }))
           .slice(0, 18);
-        setRecommendations(fallbackRanked);
+        if (fallbackRanked.length > 0) {
+          setRecommendations(fallbackRanked);
+          recommendationBatchIdsRef.current = new Set([
+            ...previouslyShownIds,
+            ...fallbackRanked.map((movie) => String(movie.id)),
+          ]);
+        } else {
+          // Exhausted this pool; allow the next rotated TMDB page to start a fresh batch.
+          setRecommendations([]);
+          recommendationBatchIdsRef.current = new Set();
+        }
       } else {
         setRecommendations(ranked);
+        recommendationBatchIdsRef.current = new Set([
+          ...previouslyShownIds,
+          ...ranked.map((movie) => String(movie.id)),
+        ]);
       }
     } catch (loadError) {
       console.error("Recommendation generation error:", loadError);
@@ -439,7 +465,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
     } finally {
       setGenerating(false);
     }
-  }, [mode, movies, partnerMovies, selectedPartnerId, profileLoading, partnerLoading, partnerLoadedFor]);
+  }, [mode, movies, partnerMovies, selectedPartnerId, profileLoading, partnerLoading, partnerLoadedFor, refreshKey]);
 
   useEffect(() => {
     if (profileLoading) return;
@@ -547,9 +573,9 @@ export default function Recommendations({ movies = [], onAddMovie }) {
   }, [mode, movies, partnerMovies]);
 
   return (
-    <div className="cine-page pb-24">
-      <section className="border-b border-white/[.13] py-14 md:py-16">
-        <div className="flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+    <div className="cine-page cine-recommendations-page pb-24">
+      <section className="cine-recommendations__hero border-b border-white/[.13] py-14 md:py-16">
+        <div className="cine-recommendations__hero-row flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-3xl">
             <p className="cine-kicker cine-accent">ЛИЧНЫЙ КИНОАРХИВ / ПОДБОРКИ</p>
             <h1 className="cine-page-title mt-4">Что посмотреть?</h1>
@@ -562,7 +588,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
             type="button"
             onClick={() => setRefreshKey((value) => value + 1)}
             disabled={generating || profileLoading || partnerLoading}
-            className="cine-button cine-button--solid shrink-0"
+            className="cine-button cine-button--solid cine-action-button shrink-0"
           >
             {generating ? <LoaderCircle size={14} className="animate-spin" /> : <RefreshCw size={14} />}
             Обновить подборку
@@ -571,12 +597,12 @@ export default function Recommendations({ movies = [], onAddMovie }) {
       </section>
 
       <section className="border-b border-[var(--line)] py-7">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="cine-recommendations__toolbar flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => setMode("me")}
-              className={`flex items-center gap-2 border px-4 py-3 cine-mono text-[9px] uppercase tracking-[.13em] transition-colors ${mode === "me" ? "border-[var(--acid)] bg-[var(--acid)] text-black" : "border-[var(--line)] text-white/45 hover:text-white"}`}
+              className={`cine-recommendation-mode flex items-center gap-2 border px-4 py-3 cine-mono text-[9px] uppercase tracking-[.13em] transition-colors ${mode === "me" ? "border-[var(--acid)] bg-[var(--acid)] text-black" : "border-[var(--line)] text-white/45 hover:text-white"}`}
             >
               <Heart size={14} />
               Для меня
@@ -584,7 +610,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
             <button
               type="button"
               onClick={() => setMode("couple")}
-              className={`flex items-center gap-2 border px-4 py-3 cine-mono text-[9px] uppercase tracking-[.13em] transition-colors ${mode === "couple" ? "border-[var(--acid)] bg-[var(--acid)] text-black" : "border-[var(--line)] text-white/45 hover:text-white"}`}
+              className={`cine-recommendation-mode flex items-center gap-2 border px-4 py-3 cine-mono text-[9px] uppercase tracking-[.13em] transition-colors ${mode === "couple" ? "border-[var(--acid)] bg-[var(--acid)] text-black" : "border-[var(--line)] text-white/45 hover:text-white"}`}
             >
               <Users size={14} />
               Для нас двоих
@@ -597,7 +623,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
               <select
                 value={selectedPartnerId}
                 onChange={(event) => setSelectedPartnerId(event.target.value)}
-                className="min-w-[220px] border border-[var(--line)] bg-[#101310] px-4 py-3 text-sm text-[var(--paper)] outline-none focus:border-[var(--acid)]"
+                className="cine-recommendations__partner-select min-w-[220px] border border-[var(--line)] bg-[#111622] px-4 py-3 text-sm text-[var(--paper)] outline-none focus:border-[var(--acid)]"
               >
                 {acceptedConnections.map((connection) => (
                   <option key={connection.partnerId} value={connection.partnerId}>
@@ -615,7 +641,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
               <p className="text-sm text-[var(--paper)]">Сначала подключи второй аккаунт</p>
               <p className="mt-1 text-xs leading-5 text-white/35">Для совместных рекомендаций нужны оценки обоих пользователей.</p>
             </div>
-            <Link to="/together" className="cine-button cine-button--solid shrink-0">
+            <Link to="/together" className="cine-button cine-button--solid cine-action-button shrink-0">
               Открыть «Вместе» <ArrowRight size={14} />
             </Link>
           </div>
@@ -643,7 +669,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
       )}
 
       <section className="pt-10">
-        <div className="mb-8 flex items-end justify-between gap-6 border-b border-white/[.13] pb-5">
+        <div className="cine-recommendations__section-head mb-8 flex items-end justify-between gap-6 border-b border-white/[.13] pb-5">
           <div>
             <p className="cine-kicker cine-accent">ПОДОБРАНО ДЛЯ ТЕБЯ</p>
             <h2 className="cine-serif mt-3 text-4xl tracking-[-.035em] text-[var(--paper)] md:text-5xl">
@@ -661,7 +687,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
         </div>
 
         {generating || profileLoading || (mode === "couple" && partnerLoading) ? (
-          <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+          <div className="cine-recommendations__grid grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
             {Array.from({ length: 6 }).map((_, index) => (
               <div key={index} className="animate-pulse">
                 <div className="aspect-[2/3] bg-white/[.05]" />
@@ -690,7 +716,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-x-4 gap-y-9 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+          <div className="cine-recommendations__grid grid grid-cols-2 gap-x-4 gap-y-9 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
             {recommendations.map((movie, index) => {
               const poster = getPoster(movie.poster_path, "w500");
               const rating = Number(movie.vote_average) || 0;
@@ -700,15 +726,15 @@ export default function Recommendations({ movies = [], onAddMovie }) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, delay: Math.min(index * 0.025, 0.25) }}
-                  className="group min-w-0"
+                  className="cine-recommendations__card group min-w-0"
                 >
-                  <div className="relative aspect-[2/3] overflow-hidden bg-[#101310]">
+                  <div className="cine-recommendations__poster relative aspect-[2/3] overflow-hidden">
                     {poster ? (
                       <img
                         src={poster}
                         alt={movie.title}
                         loading={index > 5 ? "lazy" : "eager"}
-                        className="h-full w-full object-cover opacity-[.9] transition duration-500 group-hover:scale-[1.025] group-hover:opacity-100"
+                        className="cine-recommendations__poster-image h-full w-full object-cover opacity-[.94] transition duration-500 group-hover:scale-[1.035] group-hover:opacity-100"
                         onError={(event) => { event.currentTarget.style.display = "none"; }}
                       />
                     ) : (
@@ -740,7 +766,7 @@ export default function Recommendations({ movies = [], onAddMovie }) {
                       type="button"
                       onClick={() => addToWatchlist(movie)}
                       disabled={savingId === movie.id || ownIds.has(String(movie.id))}
-                      className="mt-4 flex min-h-[38px] w-full items-center justify-center gap-2 border border-[var(--line)] px-2 py-2 cine-mono text-[8px] uppercase tracking-[.1em] text-white/55 transition-colors hover:border-[var(--acid)] hover:text-[var(--acid)] disabled:cursor-not-allowed disabled:opacity-45"
+                      className="cine-recommendations__save mt-4 flex min-h-[42px] w-full items-center justify-center gap-2 border border-[var(--line)] px-3 py-2 cine-mono text-[9px] uppercase tracking-[.08em] text-white/75 transition-colors hover:border-[var(--acid)] hover:text-[var(--acid)] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {savingId === movie.id ? (
                         <LoaderCircle size={13} className="animate-spin" />

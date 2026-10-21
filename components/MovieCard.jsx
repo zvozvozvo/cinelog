@@ -6,8 +6,11 @@ export default function MovieCard({ movie, index = 0 }) {
   const navigate = useNavigate();
   const title = movie.title || movie.name || movie.originalTitle || "Без названия";
   const year = movie.release_date?.slice(0, 4) || movie.releaseDate?.slice(0, 4) || movie.first_air_date?.slice(0, 4) || movie.year || "—";
-  const ratingValue = Number(movie.youRating ?? movie.personalRating ?? 0);
-  const hasRating = Number.isFinite(ratingValue) && ratingValue > 0;
+  const personalRating = [movie.personalRating, movie.youRating]
+    .map((value) => value === null || value === undefined || value === "" ? NaN : Number(value))
+    .find((value) => Number.isFinite(value) && value > 0) ?? 0;
+  const hasPersonalRating = personalRating > 0;
+  const tmdbRating = Number(movie.vote_average ?? movie.voteAverage ?? 0);
   const status = movie.status === "watchlist" ? "К просмотру" : "Просмотрено";
 
   function openMovie() {
@@ -26,7 +29,7 @@ export default function MovieCard({ movie, index = 0 }) {
       }}
       role="link"
       tabIndex={0}
-      aria-label={`Открыть фильм «${title}»`}
+      aria-label={`Открыть фильм «${title}»${hasPersonalRating ? `, твоя оценка ${personalRating.toFixed(1)} из 10` : ""}`}
     >
       <div className="cine-movie-card__visual">
         <MoviePoster
@@ -36,10 +39,13 @@ export default function MovieCard({ movie, index = 0 }) {
           loading={index < 3 ? "eager" : "lazy"}
           className="cine-movie-card__poster absolute inset-0 h-full w-full object-cover"
         />
-        <span className="cine-movie-card__index">{String(index + 1).padStart(2, "0")}</span>
+        <span className="cine-movie-card__status">{status}</span>
         <span className="cine-movie-card__open" aria-hidden="true"><ArrowUpRight size={17} /></span>
-        {hasRating && (
-          <span className="cine-movie-card__rating"><Star size={12} fill="currentColor" strokeWidth={1.6} />{ratingValue.toFixed(1)}</span>
+        {hasPersonalRating && (
+          <span className="cine-movie-card__rating" aria-label={`Твоя оценка ${personalRating.toFixed(1)} из 10`}>
+            <Star size={13} fill="currentColor" strokeWidth={1.7} />
+            <strong>{personalRating.toFixed(1)}</strong>
+          </span>
         )}
       </div>
 
@@ -49,8 +55,8 @@ export default function MovieCard({ movie, index = 0 }) {
           <span className="cine-movie-card__year">{year}</span>
         </div>
         <div className="cine-movie-card__meta">
-          <span>{status}</span>
-          <span>{hasRating ? "Твоя оценка" : "TMDB"}</span>
+          <span>{hasPersonalRating ? "Твоя оценка" : status}</span>
+          <span>{hasPersonalRating ? <><Star size={11} fill="currentColor" /> {personalRating.toFixed(1)} / 10</> : tmdbRating > 0 ? `TMDB ${tmdbRating.toFixed(1)}` : "Без оценки"}</span>
         </div>
       </div>
     </article>

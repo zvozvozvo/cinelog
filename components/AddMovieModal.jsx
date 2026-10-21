@@ -226,7 +226,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
         <motion.div
           initial={{ opacity: 0, y: 25, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111622] shadow-[0_30px_120px_rgba(0,0,0,.7)]"
+          className="cinelog-modal-shell relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111622] shadow-[0_30px_120px_rgba(0,0,0,.7)]"
         >
           <div className="flex items-center justify-between border-b border-white/[.07] px-6 py-5">
             <div>
@@ -261,7 +261,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Название фильма..."
-                    className="h-14 w-full rounded-xl border border-white/10 bg-white/[.035] pl-12 pr-12 text-base text-white outline-none placeholder:text-white/20 focus:border-[#aab5ff]/35"
+                    className="cinelog-modal-search h-14 w-full rounded-xl border border-white/10 bg-white/[.035] pl-12 pr-12 text-base text-white outline-none placeholder:text-white/20 focus:border-[#aab5ff]/35"
                   />
                   {searching && (
                     <LoaderCircle
@@ -394,7 +394,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                         type="button"
                         disabled={saving}
                         onClick={() => setStatus(key)}
-                        className={`cursor-pointer rounded-xl border p-4 text-left disabled:opacity-50 ${
+                        className={`cinelog-modal-status-option cursor-pointer rounded-xl border p-4 text-left disabled:opacity-50 ${
                           status === key
                             ? "border-[#aab5ff]/35 bg-[#aab5ff]/[.07]"
                             : "border-white/[.07] bg-white/[.02]"
@@ -417,7 +417,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                 </div>
 
                 {status === "watched" && (
-                  <div className="mt-8 rounded-2xl border border-[#aab5ff]/15 bg-[#aab5ff]/[.025] p-5">
+                  <div className="cinelog-modal-rating mt-8 rounded-2xl border border-[#aab5ff]/15 bg-[#aab5ff]/[.025] p-5">
                     <div className="flex items-end justify-between">
                       <div>
                         <p className="text-[10px] font-semibold uppercase tracking-[.2em] text-[#aab5ff]/70">
@@ -456,7 +456,7 @@ export default function AddMovieModal({ onClose, onAdd }) {
                   type="button"
                   onClick={addSelected}
                   disabled={loadingDetails || saving}
-                  className="mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#aab5ff] py-4 text-sm font-bold uppercase tracking-[.12em] text-black hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="cinelog-modal-save mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#aab5ff] py-4 text-sm font-bold uppercase tracking-[.12em] text-black hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {saving ? (
                     <LoaderCircle size={17} className="animate-spin" />

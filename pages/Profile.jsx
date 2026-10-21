@@ -9,6 +9,7 @@ import {
   Clock3,
   Film,
   LoaderCircle,
+  LogOut,
   Pencil,
   Save,
   Star,
@@ -338,6 +339,19 @@ export default function Profile({ movies = [] }) {
     }
   }
 
+  async function signOut() {
+    setError("");
+    setNotice("");
+    try {
+      const { error: signOutError } = await supabase.auth.signOut();
+      if (signOutError) throw signOutError;
+      navigate("/auth", { replace: true });
+    } catch (signOutError) {
+      console.error("Sign out error:", signOutError);
+      setError(signOutError?.message || "Не удалось выйти из аккаунта. Попробуй ещё раз.");
+    }
+  }
+
   if (loading) {
     return (
       <div className="cine-empty my-20 min-h-[420px]">
@@ -375,6 +389,7 @@ export default function Profile({ movies = [] }) {
           </p>
         </div>
 
+        <div className="cine-profile-actions">
         {!editing && (
           <button
             type="button"
@@ -390,6 +405,10 @@ export default function Profile({ movies = [] }) {
             Изменить профиль
           </button>
         )}
+          <button type="button" onClick={signOut} className="cine-button cine-button--quiet cine-signout-button">
+            <LogOut size={15} /> Выйти из аккаунта
+          </button>
+        </div>
       </div>
 
       {error && !editing && (

@@ -49,6 +49,24 @@ function formatRuntime(totalMinutes) {
   return minutes ? `${hours} ч ${minutes} мин` : `${hours} ч`;
 }
 
+const MOOD_FILTERS = [
+  { key: "all", label: "Всё", genres: [] },
+  { key: "laugh", label: "Посмеяться", genres: ["комедия", "семейный", "мультфильм"] },
+  { key: "adrenaline", label: "Адреналин", genres: ["боевик", "триллер", "криминал", "ужасы"] },
+  { key: "think", label: "Подумать", genres: ["драма", "детектив", "история", "документальный"] },
+  { key: "escape", label: "Другой мир", genres: ["фантастика", "фэнтези", "приключения", "анимация"] },
+];
+
+function matchesMood(movie, mood) {
+  if (!mood || mood.key === "all") return true;
+  const values = [
+    ...(Array.isArray(movie?.genres) ? movie.genres.map((item) => typeof item === "string" ? item : item?.name) : []),
+    ...(typeof movie?.genre === "string" ? movie.genre.split(/[·,|]/) : []),
+  ];
+  const haystack = values.filter(Boolean).join(" ").toLocaleLowerCase("ru");
+  return mood.genres.some((genre) => haystack.includes(genre));
+}
+
 function HeroStat({ label, value, detail }) {
   return (
     <div className="home-cinema-stat">
@@ -92,6 +110,7 @@ export default function Home({ movies = [], onAddMovie }) {
   const navigate = useNavigate();
   const [heroIndex, setHeroIndex] = useState(0);
   const [activeShelf, setActiveShelf] = useState("recent");
+  const [activeMood, setActiveMood] = useState("all");
 
   const watched = useMemo(
     () => movies.filter((movie) => movie.status === "watched").sort((a, b) => addedTime(b) - addedTime(a)),
@@ -119,17 +138,15 @@ export default function Home({ movies = [], onAddMovie }) {
   const heroPool = heroCandidates.slice(0, 5);
   const heroMovie = heroPool.length ? heroPool[heroIndex % heroPool.length] : null;
   const heroIsWatchlist = heroMovie?.status === "watchlist";
-  const shelfMovies = activeShelf === "watched"
-    ? watched.slice(0, 10)
+  const shelfSource = activeShelf === "watched"
+    ? watched
     : activeShelf === "watchlist"
-      ? watchlist.slice(0, 10)
-      : recent.slice(0, 10);
-
-  const shelfCount = activeShelf === "watched"
-    ? watched.length
-    : activeShelf === "watchlist"
-      ? watchlist.length
-      : movies.length;
+      ? watchlist
+      : recent;
+  const selectedMood = MOOD_FILTERS.find((mood) => mood.key === activeMood) || MOOD_FILTERS[0];
+  const matchingShelf = shelfSource.filter((movie) => matchesMood(movie, selectedMood));
+  const shelfMovies = matchingShelf.slice(0, 10);
+  const shelfCount = matchingShelf.length;
 
   function chooseAnotherMovie() {
     if (heroPool.length > 1) setHeroIndex((current) => (current + 1) % heroPool.length);
@@ -260,6 +277,21 @@ export default function Home({ movies = [], onAddMovie }) {
           <button type="button" className="home-cinema-add-inline" onClick={onAddMovie}><Plus size={15} /> Добавить фильм</button>
         </div>
 
+        <div className="home-cinema-mood-bar" role="group" aria-label="Фильтровать фильмы по настроению">
+          <span className="home-cinema-mood-bar__label">Настроение</span>
+          {MOOD_FILTERS.map((mood) => (
+            <button
+              key={mood.key}
+              type="button"
+              className={`home-cinema-mood-chip ${activeMood === mood.key ? "is-active" : ""}`}
+              aria-pressed={activeMood === mood.key}
+              onClick={() => setActiveMood(mood.key)}
+            >
+              {mood.label}
+            </button>
+          ))}
+        </div>
+
         {shelfMovies.length ? (
           <div className="home-cinema-rail" aria-label={`Фильмы: ${activeShelf}`}>
             {shelfMovies.map((movie, index) => (
@@ -267,6 +299,12 @@ export default function Home({ movies = [], onAddMovie }) {
                 <MovieCard movie={movie} index={index} />
               </div>
             ))}
+          </div>
+        ) : shelfSource.length > 0 && activeMood !== "all" ? (
+          <div className="home-cinema-mood-empty">
+            <Sparkles size={19} />
+            <p>В этой полке нет фильмов под выбранное настроение.</p>
+            <button type="button" onClick={() => setActiveMood("all")}>Показать все фильмы</button>
           </div>
         ) : (
           <EmptyShelf onAddMovie={onAddMovie} />
