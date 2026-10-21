@@ -6,6 +6,7 @@ import App from "./App";
 import "./index.css";
 import "./App.css";
 import "./cinelog-refresh.css";
+import "./cinelog-global.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

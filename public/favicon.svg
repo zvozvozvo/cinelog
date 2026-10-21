@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="14" fill="#090A08"/>
-  <path d="M9 23V9h14M41 9h14v14M9 41v14h14M41 55h14V41" stroke="#F3F1E9" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="12" y="43" fill="#F3F1E9" font-family="Onest,Manrope,Arial,sans-serif" font-size="34" font-weight="800" letter-spacing="-4">C</text>
-  <text x="30" y="51" fill="#F3F1E9" font-family="Onest,Manrope,Arial,sans-serif" font-size="28" font-weight="800" letter-spacing="-3">L</text>
-  <rect x="39" y="13" width="8" height="8" rx="1.5" fill="#B9F45A"/>
+  <rect width="64" height="64" rx="13" fill="#090A08"/>
+  <path d="M10 23V10h13M41 10h13v13M10 41v13h13M41 54h13V41" stroke="#F3F1E9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M38 12h5v5h-5z" fill="#B9F45A"/>
+  <text x="11" y="43" fill="#F3F1E9" font-family="Arial,sans-serif" font-size="35" font-weight="800" letter-spacing="-4">C</text>
+  <text x="30" y="50" fill="#F3F1E9" font-family="Arial,sans-serif" font-size="29" font-weight="800" letter-spacing="-3">L</text>
+  <rect x="45" y="10" width="7" height="7" rx="1" fill="#B9F45A"/>
 </svg>

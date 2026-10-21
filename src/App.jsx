@@ -56,7 +56,6 @@ export default function App() {
         setMovies([]);
         return;
       }
-      // Avoid Supabase queries inside the auth callback's synchronous state phase.
       queueMicrotask(async () => {
         try {
           const userMovies = await getUserMovies();
@@ -90,6 +89,8 @@ export default function App() {
     setMovies((current) => current.filter((movie) => String(movie.id) !== String(id)));
   }
 
+  const openAddMovie = () => setShowAddMovie(true);
+
   if (loading) {
     return (
       <main className="cine-loading-screen">
@@ -112,13 +113,15 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <Navbar onAddMovie={() => setShowAddMovie(true)} />
+      <Navbar onAddMovie={openAddMovie} />
       <div className="app-main">
         <div className="app-content">
           <Routes>
-            <Route path="/" element={<Home movies={movies} onAddMovie={() => setShowAddMovie(true)} />} />
-            <Route path="/films" element={<Films movies={movies} onAddMovie={() => setShowAddMovie(true)} />} />
-            <Route path="/watchlist" element={<Watchlist movies={movies} onAddMovie={() => setShowAddMovie(true)} />} />
+            <Route path="/" element={<Home movies={movies} onAddMovie={openAddMovie} />} />
+            <Route path="/films" element={<Films movies={movies} onAddMovie={openAddMovie} mode="all" />} />
+            <Route path="/watched" element={<Films movies={movies} onAddMovie={openAddMovie} mode="watched" />} />
+            <Route path="/rated" element={<Films movies={movies} onAddMovie={openAddMovie} mode="rated" />} />
+            <Route path="/watchlist" element={<Watchlist movies={movies} onAddMovie={openAddMovie} />} />
             <Route path="/timeline" element={<Timeline movies={movies} />} />
             <Route path="/statistics" element={<Statistics movies={movies} />} />
             <Route path="/together" element={<Together movies={movies} />} />
